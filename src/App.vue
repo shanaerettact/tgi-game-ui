@@ -31,35 +31,34 @@ const brandImages = [
 
     </div>
     <main>
-      <!-- <div class="max-w-screen-xl mx-auto px-4 pt-6 pb-2">
-        <HeroSlider />
-      </div> -->
-
-      <!-- <div class="max-w-screen-xl mx-auto px-4 py-8 space-y-12">
+      <div class="max-w-screen-xl mx-auto px-4 py-10">
         <section>
+          <div class="mb-5 flex items-center gap-2">
+            <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
+            <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">棋牌品牌</h2>
+            <span class="text-sm font-normal text-muted-foreground">Board Game Brands</span>
+          </div>
+
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <button
-              v-for="cat in categories"
-              :key="cat.label"
-              class="relative flex flex-col items-center justify-end overflow-hidden rounded-2xl border aspect-[4/3] group transition-shadow hover:shadow-lg cursor-pointer"
+            <div
+              v-for="brand in brandImages"
+              :key="brand.alt"
+              class="group flex flex-col items-center gap-2.5 rounded-xl border border-border bg-card p-4 transition-all duration-200 hover:border-primary/40 hover:shadow-md cursor-pointer"
             >
-              <img
-                :src="cat.img"
-                :alt="cat.sub"
-                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div class="relative z-10 pb-3 text-center">
-                <div class="text-white font-bold text-base">{{ cat.label }}</div>
-                <div class="text-white/70 text-xs">{{ cat.sub }}</div>
+              <div class="flex h-16 w-full items-center justify-center rounded-lg bg-secondary p-2">
+                <img
+                  :src="brand.src"
+                  :alt="brand.alt"
+                  class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                />
               </div>
-            </button>
+              <span class="font-sans text-xs font-semibold uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">
+                {{ brand.alt.replace('chess_', '') }}
+              </span>
+            </div>
           </div>
         </section>
-
-        <GameGrid />
-        <Promotions />
-      </div> -->
+      </div>
     </main>
 
     <Footer />
