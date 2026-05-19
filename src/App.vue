@@ -13,53 +13,101 @@ const categories = [
   { label: '礼物', sub: 'Gifts', img: '/images/slot-1.jpg' },
   { label: '棋牌', sub: 'Board', img: '/images/slot-2.jpg' },
 ]
+
+const brandImages = [
+  { src: '/images/brand/chess_db.png', alt: 'chess_db' },
+  { src: '/images/brand/chess_hl.png', alt: 'chess_hl' },
+  { src: '/images/brand/chess_ks.png', alt: 'chess_ks' },
+  { src: '/images/brand/chess_ky.png', alt: 'chess_ky' },
+  { src: '/images/brand/chess_leg.png', alt: 'chess_leg' },
+  { src: '/images/brand/chess_wl.png', alt: 'chess_wl' },
+]
 </script>
 
 <template>
   <div class="min-h-screen bg-background">
     <Navbar />
-    <main>
-      <div class="max-w-screen-xl mx-auto px-4 pt-6 pb-2">
-        <HeroSlider />
+    <div>
+      <div>
+        <div>棋牌游戏 CHESS GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
       </div>
-
-      <div class="bg-primary mt-4">
-        <div class="max-w-screen-xl mx-auto px-4 py-3">
-          <div class="flex items-center justify-between gap-4 overflow-x-auto">
-            <div class="flex items-center gap-6 text-primary-foreground text-sm whitespace-nowrap">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-green-300 animate-pulse" />
-                <span class="font-medium">在线玩家：</span>
-                <span class="font-bold">12,847</span>
-              </div>
-              <div class="w-px h-4 bg-white/30" />
-              <div class="flex items-center gap-2">
-                <span class="font-medium">今日奖池：</span>
-                <span class="font-bold">¥2,388,500</span>
-              </div>
-              <div class="w-px h-4 bg-white/30" />
-              <div class="flex items-center gap-2">
-                <span class="font-medium">今日大奖：</span>
-                <span class="font-bold">johnny W. 赢得 ¥88,888</span>
-              </div>
-            </div>
-            <div class="hidden md:flex items-center gap-3 shrink-0">
-              <button
-                class="px-4 py-1.5 rounded-lg bg-white text-primary font-bold text-xs hover:bg-white/90 transition-colors"
-              >
-                立即注册
-              </button>
-              <button
-                class="px-4 py-1.5 rounded-lg border border-white/40 text-white font-medium text-xs hover:bg-white/10 transition-colors"
-              >
-                下载APP
-              </button>
-            </div>
+      <div>
+        <div>真人娱乐 LIVE CASINO</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>老虎机 SLOT GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>体育游戏 SPORTS GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>捕鱼游戏 FISHING GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>体育博彩 SPORTS GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>电子竞技 ESPORTS GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>彩票游戏 LOTTERY GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>斗鸡游戏 FIGHTING GAME</div>
+        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
+          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
+            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
           </div>
         </div>
       </div>
 
-      <div class="max-w-screen-xl mx-auto px-4 py-8 space-y-12">
+    </div>
+    <main>
+      <!-- <div class="max-w-screen-xl mx-auto px-4 pt-6 pb-2">
+        <HeroSlider />
+      </div> -->
+
+      <!-- <div class="max-w-screen-xl mx-auto px-4 py-8 space-y-12">
         <section>
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             <button
@@ -83,7 +131,7 @@ const categories = [
 
         <GameGrid />
         <Promotions />
-      </div>
+      </div> -->
     </main>
 
     <Footer />
