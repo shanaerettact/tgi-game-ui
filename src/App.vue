@@ -22,86 +22,68 @@ const brandImages = [
   { src: '/images/brand/chess_leg.png', alt: 'chess_leg' },
   { src: '/images/brand/chess_wl.png', alt: 'chess_wl' },
 ]
+
+const appendixCategories = [
+  { label: '棋牌游戏', labelEn: 'CHESS GAME' },
+  { label: '真人娱乐', labelEn: 'LIVE CASINO' },
+  { label: '老虎机', labelEn: 'SLOT GAME' },
+  { label: '体育游戏', labelEn: 'SPORTS GAME' },
+  { label: '捕鱼游戏', labelEn: 'FISHING GAME' },
+  { label: '体育博彩', labelEn: 'SPORTS BETTING' },
+  { label: '电子竞技', labelEn: 'ESPORTS GAME' },
+  { label: '彩票游戏', labelEn: 'LOTTERY GAME' },
+  { label: '斗鸡游戏', labelEn: 'FIGHTING GAME' },
+]
 </script>
 
 <template>
   <div class="min-h-screen bg-background">
     <Navbar />
-    <div>
-      <div>
-        <div>棋牌游戏 CHESS GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>真人娱乐 LIVE CASINO</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>老虎机 SLOT GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>体育游戏 SPORTS GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>捕鱼游戏 FISHING GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>体育博彩 SPORTS GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>电子竞技 ESPORTS GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>彩票游戏 LOTTERY GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>斗鸡游戏 FIGHTING GAME</div>
-        <div class="max-w-screen-xl mx-auto space-y-3 px-4 pt-6 pb-2 flex flex-wrap gap-2">
-          <div v-for="brand in brandImages" :key="brand.src" class="w-1/12">
-            <img :src="brand.src" :alt="brand.alt" class="h-auto w-full rounded-lg" loading="lazy" />
-          </div>
-        </div>
-      </div>
+    <!-- Appendix: Game Provider Brands by Category -->
+    <section class="bg-card border-b border-border">
+      <div class="max-w-screen-xl mx-auto px-4 py-10 space-y-8">
 
-    </div>
+        <!-- Section heading -->
+        <div class="flex items-center gap-3">
+          <div class="w-1 h-5 rounded-full bg-primary shrink-0"></div>
+          <h2 class="text-sm font-bold uppercase tracking-widest text-muted-foreground">合作品牌 &nbsp;·&nbsp; Partner Brands</h2>
+        </div>
+
+        <!-- Category rows -->
+        <div class="space-y-6">
+          <div
+            v-for="category in appendixCategories"
+            :key="category.label"
+            class="space-y-3"
+          >
+            <!-- Category label -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-foreground tracking-wide">{{ category.label }}</span>
+              <span class="text-xs text-muted-foreground font-medium">{{ category.labelEn }}</span>
+              <div class="flex-1 h-px bg-border"></div>
+            </div>
+
+            <!-- Brand images -->
+            <div class="flex flex-wrap gap-2">
+              <div
+                v-for="brand in brandImages"
+                :key="brand.src + category.label"
+                class="group relative overflow-hidden rounded-lg border border-border bg-secondary hover:border-primary/40 transition-colors cursor-pointer"
+                style="width: calc(100% / 12 - 0.5rem)"
+              >
+                <img
+                  :src="brand.src"
+                  :alt="brand.alt"
+                  class="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
     <main>
       <!-- <div class="max-w-screen-xl mx-auto px-4 pt-6 pb-2">
         <HeroSlider />
