@@ -40,48 +40,76 @@ const appendixCategories = [
   <div class="min-h-screen bg-background">
     <Navbar />
     <!-- Appendix: Game Provider Brands by Category -->
-    <section class="bg-card border-b border-border">
-      <div class="max-w-screen-xl mx-auto px-4 py-10 space-y-8">
+    <section class="bg-background border-y border-border">
+      <!-- Top rule accent -->
+      <div class="h-0.5 w-full bg-border">
+        <div class="h-full w-24 bg-primary mx-auto"></div>
+      </div>
 
-        <!-- Section heading -->
-        <div class="flex items-center gap-3">
-          <div class="w-1 h-5 rounded-full bg-primary shrink-0"></div>
-          <h2 class="text-sm font-bold uppercase tracking-widest text-muted-foreground">合作品牌 &nbsp;·&nbsp; Partner Brands</h2>
+      <div class="max-w-screen-xl mx-auto px-6 py-12">
+
+        <!-- Section masthead -->
+        <div class="flex flex-col items-center text-center mb-10 space-y-2">
+          <div class="flex items-center gap-3 mb-1">
+            <div class="h-px w-12 bg-border"></div>
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Partner Brands</span>
+            <div class="h-px w-12 bg-border"></div>
+          </div>
+          <h2 class="text-base font-bold text-foreground tracking-tight">合作游戏品牌</h2>
+          <p class="text-xs text-muted-foreground max-w-sm leading-relaxed">涵盖全品类顶级游戏供应商，提供最优质的游戏体验</p>
         </div>
 
-        <!-- Category rows -->
-        <div class="space-y-6">
+        <!-- Outer card frame -->
+        <div class="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+
+          <!-- Category rows -->
           <div
-            v-for="category in appendixCategories"
+            v-for="(category, index) in appendixCategories"
             :key="category.label"
-            class="space-y-3"
+            :class="[
+              'flex items-start gap-0 border-b border-border last:border-b-0',
+            ]"
           >
-            <!-- Category label -->
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-semibold text-foreground tracking-wide">{{ category.label }}</span>
-              <span class="text-xs text-muted-foreground font-medium">{{ category.labelEn }}</span>
-              <div class="flex-1 h-px bg-border"></div>
+            <!-- Category label column -->
+            <div class="flex flex-col items-center justify-center gap-1 px-5 py-4 min-w-[96px] w-24 shrink-0 border-r border-border bg-secondary self-stretch">
+              <span class="text-sm font-bold text-foreground leading-tight text-center">{{ category.label }}</span>
+              <span class="text-[9px] font-semibold uppercase tracking-widest text-primary leading-tight text-center">{{ category.labelEn }}</span>
             </div>
 
-            <!-- Brand images -->
-            <div class="flex flex-wrap gap-2">
+            <!-- Brand images strip -->
+            <div class="flex flex-wrap items-center gap-2 px-5 py-4 flex-1 min-w-0">
               <div
                 v-for="brand in brandImages"
                 :key="brand.src + category.label"
-                class="group relative overflow-hidden rounded-lg border border-border bg-secondary hover:border-primary/40 transition-colors cursor-pointer"
-                style="width: calc(100% / 12 - 0.5rem)"
+                class="group relative overflow-hidden rounded-md border border-border bg-background hover:border-primary/50 hover:shadow-sm transition-all duration-200 cursor-pointer shrink-0"
+                style="width: 64px; height: 40px;"
               >
                 <img
                   :src="brand.src"
                   :alt="brand.alt"
-                  class="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
                 />
               </div>
             </div>
           </div>
+
         </div>
 
+        <!-- Bottom count note -->
+        <div class="flex items-center justify-center gap-2 mt-6">
+          <div class="h-px flex-1 bg-border max-w-[120px]"></div>
+          <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">
+            {{ appendixCategories.length }} 游戏类别 &nbsp;·&nbsp; {{ brandImages.length * appendixCategories.length }}+ 品牌游戏
+          </span>
+          <div class="h-px flex-1 bg-border max-w-[120px]"></div>
+        </div>
+
+      </div>
+
+      <!-- Bottom rule accent -->
+      <div class="h-0.5 w-full bg-border">
+        <div class="h-full w-24 bg-primary mx-auto"></div>
       </div>
     </section>
     <main>
