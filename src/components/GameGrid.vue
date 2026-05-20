@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { Trophy, Gamepad2, Users, Zap, Flame, type LucideIcon } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 import GameCard, { type BrandItem, type Game } from './GameCard.vue'
+import { getBrandGameImages, resolveBrandGameKey } from '@/lib/brandGames'
 
 const categoryBrandFiles: Record<string, { folder: string; files: string[] }> = {
   chess: { folder: 'chess', files: ['kx_chess.png'] },
@@ -15,6 +16,30 @@ const categoryBrandFiles: Record<string, { folder: string; files: string[] }> = 
 function formatBrandLabel(file: string) {
   const base = file.replace(/\.png$/i, '').split('_')[0]
   return base.toUpperCase()
+}
+
+function formatGameName(imagePath: string) {
+  const filename = imagePath.split('/').pop()?.replace(/\.png$/i, '') ?? ''
+  const stripped = filename
+    .replace(/^(kx_chess_|eeai_live_|mt_live_|antplay_slot_|as_slot_|gb_slot_slots-|gb_slot_|glc_slot_|pg_slot_|fb_sport_|ltg_lottery_)/i, '')
+    .replace(/[-_]/g, ' ')
+    .trim()
+  return stripped || filename
+}
+
+function buildGamesFromBrandImages(images: string[], category: string, provider: string): Game[] {
+  return images.map((image, index) => ({
+    id: index + 1,
+    name: formatGameName(image),
+    nameEn: formatGameName(image),
+    image,
+    category,
+    provider,
+    rtp: null,
+    hot: false,
+    new: false,
+    rating: 4.5,
+  }))
 }
 
 const props = withDefaults(
@@ -249,10 +274,23 @@ const categoryBrands = computed<BrandItem[]>(() => {
     src: `/images/brand/${config.folder}/${file}`,
     alt: file.replace(/\.png$/i, ''),
     label: formatBrandLabel(file),
+    gameKey: resolveBrandGameKey(config.folder, file),
   }))
 })
 
 const activeBrandSrc = ref<string | null>(null)
+
+const displayGames = computed(() => {
+  if (categoryBrands.value.length > 0) {
+    const activeBrand = categoryBrands.value.find((brand) => brand.src === activeBrandSrc.value)
+    if (!activeBrand) return []
+
+    const images = getBrandGameImages(activeBrand.gameKey)
+    return buildGamesFromBrandImages(images, props.category, activeBrand.label)
+  }
+
+  return filtered.value
+})
 
 watch(
   categoryBrands,
@@ -331,10 +369,10 @@ function selectBrand(src: string) {
       </div>
 
       <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <GameCard v-for="game in filtered" :key="game.id" :game="game" />
+        <GameCard v-for="game in displayGames" :key="`${game.image}-${game.id}`" :game="game" />
       </div>
 
-      <div v-if="filtered.length === 0" class="py-16 text-center text-muted-foreground">
+      <div v-if="displayGames.length === 0" class="py-16 text-center text-muted-foreground">
         暫無遊戲
       </div>
     </section>

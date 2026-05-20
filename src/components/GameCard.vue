@@ -18,6 +18,7 @@ export interface BrandItem {
   src: string
   alt: string
   label: string
+  gameKey: string
 }
 
 const props = defineProps<{
