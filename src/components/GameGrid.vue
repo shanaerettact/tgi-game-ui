@@ -339,12 +339,8 @@ function selectBrand(src: string) {
 
       <div
         v-if="categoryBrands.length"
-        class="mb-6 rounded-2xl border border-border/60 bg-muted/30 px-3 py-4 sm:px-4"
+        class="mb-6 rounded-2xl border border-border/60 bg-muted/30 px-3 pt-1.5 pb-2 sm:px-4"
       >
-        <div class="mb-3 flex items-center gap-2">
-          <span class="block h-4 w-0.5 rounded-full bg-primary/60" aria-hidden="true" />
-          <p class="font-sans text-xs font-medium text-muted-foreground">合作品牌</p>
-        </div>
         <div class="grid grid-cols-4 gap-1.5 sm:grid-cols-5 sm:gap-2 md:grid-cols-5 lg:grid-cols-6">
           <GameCard
             v-for="brand in categoryBrands"
@@ -368,7 +364,7 @@ function selectBrand(src: string) {
         <span class="h-px flex-1 bg-border" />
       </div>
 
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div class="grid grid-cols-2 gap-1.5 lg:grid-cols-6">
         <GameCard v-for="game in displayGames" :key="`${game.image}-${game.id}`" :game="game" />
       </div>
 

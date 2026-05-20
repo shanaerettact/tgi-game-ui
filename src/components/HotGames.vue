@@ -71,9 +71,9 @@ function formatBrandLabel(alt: string, prefix: string) {
         <div
           v-for="brand in section.images"
           :key="`${section.id}-${brand.alt}`"
-          class="group flex cursor-pointer flex-col items-center gap-2.5 rounded-xl border border-border bg-card p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-md sm:p-4"
+          class="group flex cursor-pointer flex-col items-center gap-2.5 rounded-xl border border-border bg-white p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-md sm:p-4"
         >
-          <div class="flex h-40 w-full items-center justify-center rounded-lg bg-secondary p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
+          <div class="flex h-40 w-full items-center justify-center rounded-lg bg-white p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
             <img
               :src="brand.src"
               :alt="brand.alt"
