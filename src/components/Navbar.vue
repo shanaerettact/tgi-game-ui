@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { useRoute, RouterLink } from 'vue-router'
 import {
-  Zap,
-  Trophy,
-  Users,
-  LayoutGrid,
   ChevronDown,
   Globe,
   Wallet,
@@ -13,26 +10,21 @@ import {
   Menu,
   X,
   RefreshCw,
-  Fish,
-  Home,
-  Gamepad,
-  Bird,
-  Gamepad2,
-  type LucideIcon,
 } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 
-const navItems: { label: string; labelEn: string; icon: LucideIcon }[] = [
-  { label: '首頁', labelEn: 'Home', icon: Home },
-  { label: '棋牌', labelEn: 'Board', icon: LayoutGrid },
-  { label: '真人', labelEn: 'Live', icon: Users },
-  { label: '电子', labelEn: 'Slots', icon: Gamepad },
-  { label: '捕鱼', labelEn: 'Fishing', icon: Fish },
-  { label: '体育', labelEn: 'Sports', icon: Trophy },
-  { label: '电竞', labelEn: 'Esports', icon: Gamepad2 },
-  { label: '彩票', labelEn: 'Lottery', icon: Zap },
-  { label: '斗鸡', labelEn: 'Fighting', icon: Bird },
+const navItems: { label: string; labelEn: string; icon: string; path: string }[] = [
+  { label: '熱門', labelEn: 'Home', icon: '/images/game-type/hot.png', path: '/' },
+  { label: '棋牌', labelEn: 'Chess', icon: '/images/game-type/chess.png', path: '/chess' },
+  { label: '真人', labelEn: 'Live', icon: '/images/game-type/live.png', path: '/live' },
+  { label: '电子', labelEn: 'Slots', icon: '/images/game-type/slot.png', path: '/slots' },
+  { label: '体育', labelEn: 'Sports', icon: '/images/game-type/sports.png', path: '/sports' },
+  { label: '彩票', labelEn: 'Lottery', icon: '/images/game-type/lottery.png', path: '/lottery' },
 ]
+
+const route = useRoute()
+
+const visibleNavItems = computed(() => navItems.filter((item) => item.icon.trim() !== ''))
 
 const currencyOptions = [
   {
@@ -56,7 +48,11 @@ function getCurrencyFlag(code: CurrencyCode) {
 }
 
 const mobileOpen = ref(false)
-const activeItem = ref('Home')
+
+const activeItem = computed(() => {
+  const match = navItems.find((item) => item.path === route.path)
+  return match?.labelEn ?? 'Home'
+})
 const selectedCurrency = ref<CurrencyCode>('CNY')
 const currencyOpen = ref(false)
 const currencyMenuRef = ref<HTMLElement | null>(null)
@@ -125,12 +121,7 @@ onUnmounted(() => {
   if (balanceRefreshTimer) clearTimeout(balanceRefreshTimer)
 })
 
-function setActiveItem(labelEn: string) {
-  activeItem.value = labelEn
-}
-
-function selectNavItem(labelEn: string) {
-  setActiveItem(labelEn)
+function closeMobileMenu() {
   mobileOpen.value = false
 }
 </script>
@@ -147,10 +138,10 @@ function selectNavItem(labelEn: string) {
       <nav
         class="hidden min-w-0 items-center justify-start gap-0.5 overflow-x-auto scroll-pr-4 lg:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        <button
-          v-for="item in navItems"
+        <RouterLink
+          v-for="item in visibleNavItems"
           :key="item.labelEn"
-          type="button"
+          :to="item.path"
           class="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium transition-all duration-150"
           :class="
             cn(
@@ -159,14 +150,12 @@ function selectNavItem(labelEn: string) {
                 : 'text-muted-foreground hover:text-foreground hover:bg-secondary',
             )
           "
-          @click="setActiveItem(item.labelEn)"
         >
-          <component :is="item.icon" class="h-4 w-4 shrink-0" />
+          <img :src="item.icon" :alt="item.label" class="h-5 w-5 shrink-0 rounded object-contain" />
           <span class="flex shrink-0 flex-col items-start leading-tight whitespace-nowrap">
             <span>{{ item.label }}</span>
-            <span class="hidden text-[10px] font-normal opacity-70 2xl:block">{{ item.labelEn }}</span>
           </span>
-        </button>
+        </RouterLink>
       </nav>
 
       <div
@@ -276,11 +265,11 @@ function selectNavItem(labelEn: string) {
 
     <div v-if="mobileOpen" class="lg:hidden border-t border-border bg-card px-3 pb-3 pt-2">
       <nav class="flex flex-col gap-1">
-        <button
-          v-for="item in navItems"
+        <RouterLink
+          v-for="item in visibleNavItems"
           :key="item.labelEn"
-          type="button"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-150 text-left"
+          :to="item.path"
+          class="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition-all duration-150"
           :class="
             cn(
               activeItem === item.labelEn
@@ -288,14 +277,13 @@ function selectNavItem(labelEn: string) {
                 : 'text-muted-foreground hover:text-foreground hover:bg-secondary',
             )
           "
-          @click="selectNavItem(item.labelEn)"
+          @click="closeMobileMenu"
         >
-          <component :is="item.icon" class="h-4 w-4 shrink-0" />
+          <img :src="item.icon" :alt="item.label" class="h-5 w-5 shrink-0 rounded object-contain" />
           <span class="flex min-w-0 flex-col gap-0.5">
             <span>{{ item.label }}</span>
-            <span class="text-xs opacity-60">{{ item.labelEn }}</span>
           </span>
-        </button>
+        </RouterLink>
       </nav>
       <div class="mt-4 flex gap-2">
         <button
