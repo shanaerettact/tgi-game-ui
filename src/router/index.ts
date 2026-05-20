@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import BrandSections from '@/components/BrandSections.vue'
+import HotGames from '@/components/HotGames.vue'
 import Chess from '@/components/Chess.vue'
 import LiveGames from '@/components/LiveGames.vue'
 import SlotGames from '@/components/SlotGames.vue'
@@ -9,7 +9,7 @@ import LotteryGames from '@/components/LotteryGames.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', name: 'Home', component: BrandSections },
+    { path: '/', name: 'Home', component: HotGames },
     { path: '/chess', name: 'Chess', component: Chess },
     { path: '/live', name: 'Live', component: LiveGames },
     { path: '/slots', name: 'Slots', component: SlotGames },

@@ -1,8 +1,21 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Trophy, Gamepad2, Users, Zap, Flame, type LucideIcon } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
-import GameCard, { type Game } from './GameCard.vue'
+import GameCard, { type BrandItem, type Game } from './GameCard.vue'
+
+const categoryBrandFiles: Record<string, { folder: string; files: string[] }> = {
+  chess: { folder: 'chess', files: ['kx_chess.png'] },
+  live: { folder: 'live', files: ['eeai_live.png', 'mt_live.png'] },
+  slots: { folder: 'slot', files: ['antplay_slot.png', 'as_slot.png', 'gb_slot.png', 'glc_slot.png', 'pg_slot.png'] },
+  sports: { folder: 'sport', files: ['fb_sport.png'] },
+  lottery: { folder: 'lottery', files: ['ltg_lottery.png'] },
+}
+
+function formatBrandLabel(file: string) {
+  const base = file.replace(/\.png$/i, '').split('_')[0]
+  return base.toUpperCase()
+}
 
 const props = withDefaults(
   defineProps<{
@@ -225,6 +238,33 @@ const filtered = computed(() => {
 
   return games.filter((g) => g.category === props.category)
 })
+
+const categoryBrands = computed<BrandItem[]>(() => {
+  if (props.showCategoryTabs) return []
+
+  const config = categoryBrandFiles[props.category]
+  if (!config) return []
+
+  return config.files.map((file) => ({
+    src: `/images/brand/${config.folder}/${file}`,
+    alt: file.replace(/\.png$/i, ''),
+    label: formatBrandLabel(file),
+  }))
+})
+
+const activeBrandSrc = ref<string | null>(null)
+
+watch(
+  categoryBrands,
+  (brands) => {
+    activeBrandSrc.value = brands[0]?.src ?? null
+  },
+  { immediate: true },
+)
+
+function selectBrand(src: string) {
+  activeBrandSrc.value = src
+}
 </script>
 
 <template>
@@ -257,6 +297,37 @@ const filtered = computed(() => {
           {{ cat.label }}
           <span class="text-[10px] font-normal opacity-70">{{ cat.labelEn }}</span>
         </button>
+      </div>
+
+      <div
+        v-if="categoryBrands.length"
+        class="mb-6 rounded-2xl border border-border/60 bg-muted/30 px-3 py-4 sm:px-4"
+      >
+        <div class="mb-3 flex items-center gap-2">
+          <span class="block h-4 w-0.5 rounded-full bg-primary/60" aria-hidden="true" />
+          <p class="font-sans text-xs font-medium text-muted-foreground">合作品牌</p>
+        </div>
+        <div class="grid grid-cols-4 gap-1.5 sm:grid-cols-5 sm:gap-2 md:grid-cols-5 lg:grid-cols-6">
+          <GameCard
+            v-for="brand in categoryBrands"
+            :key="brand.src"
+            :brand="brand"
+            :active="activeBrandSrc === brand.src"
+            @click="selectBrand(brand.src)"
+          />
+        </div>
+      </div>
+
+      <div
+        v-if="categoryBrands.length"
+        class="mb-6 flex items-center gap-3"
+        aria-hidden="true"
+      >
+        <span class="h-px flex-1 bg-border" />
+        <span class="shrink-0 font-sans text-[14px] font-medium uppercase tracking-widest text-muted-foreground/80">
+          遊戲列表
+        </span>
+        <span class="h-px flex-1 bg-border" />
       </div>
 
       <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">

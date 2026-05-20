@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BackToTop from './BackToTop.vue'
+
 type BrandImage = { src: string; alt: string }
 
 function createBrandSection(
@@ -87,4 +89,5 @@ function formatBrandLabel(alt: string, prefix: string) {
       </div>
     </section>
   </div>
+  <BackToTop />
 </template>
