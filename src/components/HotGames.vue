@@ -44,23 +44,25 @@ function formatBrandLabel(alt: string, prefix: string) {
 </script>
 
 <template>
+  <!-- Outer wrapper: establishes stacking context for the two decorative side images -->
   <div class="relative overflow-hidden">
     <!-- Left background decoration image -->
     <img
       src="/images/casino-bg-model.jpg"
       alt=""
       aria-hidden="true"
-      class="pointer-events-none absolute left-0 top-0 h-full w-48 object-cover opacity-30 blur-sm select-none lg:w-64"
+      class="pointer-events-none absolute inset-y-0 left-0 z-0 h-full w-48 select-none object-cover object-center opacity-25 blur-sm lg:w-64"
     />
-    <!-- Right background decoration image -->
+    <!-- Right background decoration image (mirrored horizontally) -->
     <img
       src="/images/casino-bg-model.jpg"
       alt=""
       aria-hidden="true"
-      class="pointer-events-none absolute right-0 top-0 h-full w-48 object-cover opacity-30 blur-sm select-none lg:w-64"
+      class="pointer-events-none absolute inset-y-0 right-0 z-0 h-full w-48 select-none object-cover object-center opacity-25 blur-sm lg:w-64"
       style="transform: scaleX(-1);"
     />
-  <div class="relative z-10 mx-auto max-w-screen-xl space-y-12 px-4 py-10">
+    <!-- Main content sits above the decorative images -->
+    <div class="relative z-10 mx-auto max-w-screen-xl space-y-12 px-4 py-10">
     <section v-for="section in brandSections" :key="section.id">
       <div class="mb-5 flex items-center gap-2">
         <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
@@ -130,7 +132,7 @@ function formatBrandLabel(alt: string, prefix: string) {
         </div>
       </div>
     </section>
-  </div>
-  </div>
+    </div><!-- end main content -->
+  </div><!-- end outer relative wrapper -->
   <BackToTop />
 </template>
