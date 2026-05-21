@@ -46,7 +46,7 @@ const props = defineProps<{
       <img
         :src="brand.src"
         :alt="brand.alt"
-        class="h-10 w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-105 sm:h-8 sm:max-w-[100%]"
+        class="h-10 w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:max-w-[100%]"
       />
     </div>
   </div>
@@ -65,7 +65,7 @@ const props = defineProps<{
       />
     </div>
     <span
-      class="font-sans text-xs font-semibold uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground"
+      class="font-sans text- font-semibold uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground"
     >
       {{ game.name }}
     </span>

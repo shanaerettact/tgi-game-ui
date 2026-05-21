@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, inject, nextTick, onMounted, onUnmounted, ref, type Ref } from 'vue'
 import { ArrowUp } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 
 const SCROLL_THRESHOLD = 80
-const visible = ref(false)
+const mobileMenuOpen = inject<Ref<boolean>>('mobileMenuOpen', ref(false))
+const scrollVisible = ref(false)
+const visible = computed(() => scrollVisible.value && !mobileMenuOpen.value)
 
 function updateVisibility() {
-  visible.value = window.scrollY > SCROLL_THRESHOLD
+  scrollVisible.value = window.scrollY > SCROLL_THRESHOLD
 }
 
 function scrollToTop() {

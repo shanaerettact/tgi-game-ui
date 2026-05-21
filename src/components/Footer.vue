@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { Shield, Gamepad2, Users, Mail } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { useRoute, RouterLink } from 'vue-router'
+import { Gamepad2, Users } from 'lucide-vue-next'
+import { cn } from '@/lib/utils'
+import { navItems } from '@/lib/navItems'
+
+const route = useRoute()
+
+const visibleNavItems = computed(() => navItems.filter((item) => item.icon.trim() !== ''))
+
+const activeItem = computed(() => {
+  const match = navItems.find((item) => item.path === route.path)
+  return match?.labelEn ?? 'Home'
+})
 
 const footerLinks = {
-  games: [
-    { label: '体育投注', href: '#' },
-    { label: '电子老虎机', href: '#' },
-    { label: '真人荷官', href: '#' },
-    { label: '彩票游戏', href: '#' },
-    { label: '棋牌娱乐', href: '#' },
-  ],
   support: [
     { label: '关于我们', href: '#' },
     { label: '负责任博彩', href: '#' },
@@ -17,8 +23,6 @@ const footerLinks = {
     { label: '帮助中心', href: '#' },
   ],
 }
-
-const providers = ['PG Soft', 'Pragmatic', 'NetEnt', 'Evolution', "Play'n GO", 'Microgaming']
 </script>
 
 <template>
@@ -32,20 +36,6 @@ const providers = ['PG Soft', 'Pragmatic', 'NetEnt', 'Evolution', "Play'n GO", '
           <p class="text-muted-foreground text-sm leading-relaxed max-w-xs">
             全球领先的在线博彩娱乐平台，为您提供最安全、最公平、最刺激的游戏体验。持有合法运营牌照，百分百保障您的资金安全。
           </p>
-          <div class="space-y-2">
-            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-              <Mail class="w-3.5 h-3.5 text-primary" />
-              <span>support@top10casino.com</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <div
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary border border-border text-xs text-muted-foreground font-medium"
-            >
-              <Shield class="w-3 h-3 text-primary" />
-              SSL加密
-            </div>
-          </div>
         </div>
 
         <div>
@@ -54,10 +44,20 @@ const providers = ['PG Soft', 'Pragmatic', 'NetEnt', 'Evolution', "Play'n GO", '
             游戏大厅
           </h4>
           <ul class="space-y-2.5">
-            <li v-for="link in footerLinks.games" :key="link.label">
-              <a :href="link.href" class="text-sm text-muted-foreground hover:text-primary transition-colors">
-                {{ link.label }}
-              </a>
+            <li v-for="item in visibleNavItems" :key="item.labelEn">
+              <RouterLink
+                :to="item.path"
+                class="text-sm transition-colors"
+                :class="
+                  cn(
+                    activeItem === item.labelEn
+                      ? 'font-semibold text-primary'
+                      : 'text-muted-foreground hover:text-primary',
+                  )
+                "
+              >
+                {{ item.label }}
+              </RouterLink>
             </li>
           </ul>
         </div>
@@ -73,21 +73,6 @@ const providers = ['PG Soft', 'Pragmatic', 'NetEnt', 'Evolution', "Play'n GO", '
               </a>
             </li>
           </ul>
-        </div>
-      </div>
-
-      <div class="border-t border-border pt-8 mb-8">
-        <p class="text-xs text-muted-foreground font-medium uppercase tracking-widest text-center mb-4">
-          合作游戏提供商
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-3">
-          <div
-            v-for="provider in providers"
-            :key="provider"
-            class="px-4 py-2 rounded-lg bg-secondary border border-border text-xs font-semibold text-muted-foreground hover:border-primary/40 hover:text-foreground transition-colors cursor-pointer"
-          >
-            {{ provider }}
-          </div>
         </div>
       </div>
 

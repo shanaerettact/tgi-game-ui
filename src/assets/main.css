@@ -128,21 +128,7 @@
   }
 }
 
-/* ============================================================
-   SELECTABLE COLOR SCHEMES
-   Apply via data-theme attribute on <html>:
-     <html data-theme="ocean">
-     <html data-theme="neon">
-     <html data-theme="gold">
-     <html data-theme="rose">
-     <html data-theme="cyber">
-     <html data-theme="sunset">
-   Dark variant: combine with class="dark"
-   ============================================================ */
 
-/* ----------------------------------------------------------
-   Theme: Ocean  |  Deep sapphire blue — calm, premium
-   ---------------------------------------------------------- */
 [data-theme="ocean"] {
   --background: #F0F4F8;
   --foreground: #0D1B2A;
@@ -176,42 +162,6 @@
   --casino-red-light: #EBF2FF;
 }
 
-[data-theme="ocean"].dark {
-  --background: #060D18;
-  --foreground: #E8F0FA;
-  --card: #0D1B2A;
-  --card-foreground: #E8F0FA;
-  --popover: #0D1B2A;
-  --popover-foreground: #E8F0FA;
-  --primary: #3B82F6;
-  --primary-foreground: #FFFFFF;
-  --secondary: #112240;
-  --secondary-foreground: #93C5FD;
-  --muted: #112240;
-  --muted-foreground: #6B9EC8;
-  --accent: #0EA5E9;
-  --accent-foreground: #FFFFFF;
-  --destructive: #7F1D1D;
-  --destructive-foreground: #FCA5A5;
-  --border: #1E3A5F;
-  --input: #1E3A5F;
-  --ring: #3B82F6;
-  --sidebar: #0D1B2A;
-  --sidebar-foreground: #E8F0FA;
-  --sidebar-primary: #3B82F6;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #112240;
-  --sidebar-accent-foreground: #93C5FD;
-  --sidebar-border: #1E3A5F;
-  --sidebar-ring: #3B82F6;
-  --casino-red: #3B82F6;
-  --casino-red-hover: #2563EB;
-  --casino-red-light: #1E3A5F;
-}
-
-/* ----------------------------------------------------------
-   Theme: Neon  |  Electric lime-green on near-black — bold, edgy
-   ---------------------------------------------------------- */
 [data-theme="neon"] {
   --background: #F2F9F2;
   --foreground: #0A1A0A;
@@ -245,42 +195,6 @@
   --casino-red-light: #DCFCE7;
 }
 
-[data-theme="neon"].dark {
-  --background: #030A04;
-  --foreground: #DCFCE7;
-  --card: #071A09;
-  --card-foreground: #DCFCE7;
-  --popover: #071A09;
-  --popover-foreground: #DCFCE7;
-  --primary: #4ADE80;
-  --primary-foreground: #052E16;
-  --secondary: #0D2E13;
-  --secondary-foreground: #86EFAC;
-  --muted: #0D2E13;
-  --muted-foreground: #4ADE80;
-  --accent: #22C55E;
-  --accent-foreground: #052E16;
-  --destructive: #7F1D1D;
-  --destructive-foreground: #FCA5A5;
-  --border: #14532D;
-  --input: #14532D;
-  --ring: #4ADE80;
-  --sidebar: #071A09;
-  --sidebar-foreground: #DCFCE7;
-  --sidebar-primary: #4ADE80;
-  --sidebar-primary-foreground: #052E16;
-  --sidebar-accent: #0D2E13;
-  --sidebar-accent-foreground: #86EFAC;
-  --sidebar-border: #14532D;
-  --sidebar-ring: #4ADE80;
-  --casino-red: #4ADE80;
-  --casino-red-hover: #22C55E;
-  --casino-red-light: #14532D;
-}
-
-/* ----------------------------------------------------------
-   Theme: Gold  |  Rich amber-gold — luxury, prestige
-   ---------------------------------------------------------- */
 [data-theme="gold"] {
   --background: #FDFAF2;
   --foreground: #1A1200;
@@ -314,42 +228,7 @@
   --casino-red-light: #FFFBEB;
 }
 
-[data-theme="gold"].dark {
-  --background: #0D0900;
-  --foreground: #FEF3C7;
-  --card: #1A1200;
-  --card-foreground: #FEF3C7;
-  --popover: #1A1200;
-  --popover-foreground: #FEF3C7;
-  --primary: #FBBF24;
-  --primary-foreground: #1A1200;
-  --secondary: #2D1F00;
-  --secondary-foreground: #FCD34D;
-  --muted: #2D1F00;
-  --muted-foreground: #D97706;
-  --accent: #F59E0B;
-  --accent-foreground: #1A1200;
-  --destructive: #7F1D1D;
-  --destructive-foreground: #FCA5A5;
-  --border: #452C00;
-  --input: #452C00;
-  --ring: #FBBF24;
-  --sidebar: #1A1200;
-  --sidebar-foreground: #FEF3C7;
-  --sidebar-primary: #FBBF24;
-  --sidebar-primary-foreground: #1A1200;
-  --sidebar-accent: #2D1F00;
-  --sidebar-accent-foreground: #FCD34D;
-  --sidebar-border: #452C00;
-  --sidebar-ring: #FBBF24;
-  --casino-red: #FBBF24;
-  --casino-red-hover: #F59E0B;
-  --casino-red-light: #2D1F00;
-}
 
-/* ----------------------------------------------------------
-   Theme: Rose  |  Vivid hot pink — vibrant, playful, energetic
-   ---------------------------------------------------------- */
 [data-theme="rose"] {
   --background: #FFF5F7;
   --foreground: #1A050A;
@@ -383,42 +262,7 @@
   --casino-red-light: #FFF1F2;
 }
 
-[data-theme="rose"].dark {
-  --background: #0D0007;
-  --foreground: #FFE4EC;
-  --card: #1A0510;
-  --card-foreground: #FFE4EC;
-  --popover: #1A0510;
-  --popover-foreground: #FFE4EC;
-  --primary: #FB7185;
-  --primary-foreground: #1A0510;
-  --secondary: #3D0A1E;
-  --secondary-foreground: #FDA4AF;
-  --muted: #3D0A1E;
-  --muted-foreground: #F43F5E;
-  --accent: #F43F5E;
-  --accent-foreground: #FFFFFF;
-  --destructive: #7F1D1D;
-  --destructive-foreground: #FCA5A5;
-  --border: #5D1030;
-  --input: #5D1030;
-  --ring: #FB7185;
-  --sidebar: #1A0510;
-  --sidebar-foreground: #FFE4EC;
-  --sidebar-primary: #FB7185;
-  --sidebar-primary-foreground: #1A0510;
-  --sidebar-accent: #3D0A1E;
-  --sidebar-accent-foreground: #FDA4AF;
-  --sidebar-border: #5D1030;
-  --sidebar-ring: #FB7185;
-  --casino-red: #FB7185;
-  --casino-red-hover: #F43F5E;
-  --casino-red-light: #3D0A1E;
-}
 
-/* ----------------------------------------------------------
-   Theme: Cyber  |  Vivid teal/cyan — futuristic, tech, sharp
-   ---------------------------------------------------------- */
 [data-theme="cyber"] {
   --background: #F0FDFC;
   --foreground: #042F2E;
@@ -452,42 +296,6 @@
   --casino-red-light: #F0FDFC;
 }
 
-[data-theme="cyber"].dark {
-  --background: #010F0E;
-  --foreground: #CCFBF1;
-  --card: #042F2E;
-  --card-foreground: #CCFBF1;
-  --popover: #042F2E;
-  --popover-foreground: #CCFBF1;
-  --primary: #2DD4BF;
-  --primary-foreground: #042F2E;
-  --secondary: #0A3330;
-  --secondary-foreground: #5EEAD4;
-  --muted: #0A3330;
-  --muted-foreground: #14B8A6;
-  --accent: #14B8A6;
-  --accent-foreground: #042F2E;
-  --destructive: #7F1D1D;
-  --destructive-foreground: #FCA5A5;
-  --border: #134E4A;
-  --input: #134E4A;
-  --ring: #2DD4BF;
-  --sidebar: #042F2E;
-  --sidebar-foreground: #CCFBF1;
-  --sidebar-primary: #2DD4BF;
-  --sidebar-primary-foreground: #042F2E;
-  --sidebar-accent: #0A3330;
-  --sidebar-accent-foreground: #5EEAD4;
-  --sidebar-border: #134E4A;
-  --sidebar-ring: #2DD4BF;
-  --casino-red: #2DD4BF;
-  --casino-red-hover: #14B8A6;
-  --casino-red-light: #0A3330;
-}
-
-/* ----------------------------------------------------------
-   Theme: Sunset  |  Vivid orange — warm, energetic, inviting
-   ---------------------------------------------------------- */
 [data-theme="sunset"] {
   --background: #FFF8F3;
   --foreground: #1C0A00;
@@ -521,35 +329,3 @@
   --casino-red-light: #FFF7ED;
 }
 
-[data-theme="sunset"].dark {
-  --background: #0D0400;
-  --foreground: #FFEDD5;
-  --card: #1C0A00;
-  --card-foreground: #FFEDD5;
-  --popover: #1C0A00;
-  --popover-foreground: #FFEDD5;
-  --primary: #FB923C;
-  --primary-foreground: #1C0A00;
-  --secondary: #3A1500;
-  --secondary-foreground: #FDBA74;
-  --muted: #3A1500;
-  --muted-foreground: #F97316;
-  --accent: #F97316;
-  --accent-foreground: #1C0A00;
-  --destructive: #7F1D1D;
-  --destructive-foreground: #FCA5A5;
-  --border: #5A2400;
-  --input: #5A2400;
-  --ring: #FB923C;
-  --sidebar: #1C0A00;
-  --sidebar-foreground: #FFEDD5;
-  --sidebar-primary: #FB923C;
-  --sidebar-primary-foreground: #1C0A00;
-  --sidebar-accent: #3A1500;
-  --sidebar-accent-foreground: #FDBA74;
-  --sidebar-border: #5A2400;
-  --sidebar-ring: #FB923C;
-  --casino-red: #FB923C;
-  --casino-red-hover: #F97316;
-  --casino-red-light: #3A1500;
-}

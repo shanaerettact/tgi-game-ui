@@ -1,0 +1,19 @@
+{
+  "label": {
+    "welcome": "Welcome, {value1}!",
+    "darkTheme": "Dark",
+    "lightTheme": "Light",
+    "selected": "Selected",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "clear": "Clear"
+  },
+  "error_code": {
+    "400": "Incorrect params.",
+    "401": "SessionKey has expired.",
+    "403": "Insufficient permissions.",
+    "452": "Incorrect Username or Password.",
+    "453": "Disable.",
+    "500": "System error."
+  }
+}
