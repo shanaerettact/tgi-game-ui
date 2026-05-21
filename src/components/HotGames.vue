@@ -44,7 +44,23 @@ function formatBrandLabel(alt: string, prefix: string) {
 </script>
 
 <template>
-  <div class="mx-auto max-w-screen-xl space-y-12 px-4 py-10">
+  <div class="relative overflow-hidden">
+    <!-- Left background decoration image -->
+    <img
+      src="/images/casino-bg-model.jpg"
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute left-0 top-0 h-full w-48 object-cover opacity-30 blur-sm select-none lg:w-64"
+    />
+    <!-- Right background decoration image -->
+    <img
+      src="/images/casino-bg-model.jpg"
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute right-0 top-0 h-full w-48 object-cover opacity-30 blur-sm select-none lg:w-64"
+      style="transform: scaleX(-1);"
+    />
+  <div class="relative z-10 mx-auto max-w-screen-xl space-y-12 px-4 py-10">
     <section v-for="section in brandSections" :key="section.id">
       <div class="mb-5 flex items-center gap-2">
         <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
@@ -114,6 +130,7 @@ function formatBrandLabel(alt: string, prefix: string) {
         </div>
       </div>
     </section>
+  </div>
   </div>
   <BackToTop />
 </template>
