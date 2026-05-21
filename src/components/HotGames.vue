@@ -44,29 +44,59 @@ function formatBrandLabel(alt: string, prefix: string) {
 </script>
 
 <template>
-  <!-- Outer wrapper: establishes stacking context for the two decorative side images -->
-  <div class="relative overflow-hidden">
-    <!-- Left background decoration image -->
+  <!--
+    Outer wrapper: dark casino-toned background with left/right decorative images.
+    Layers (bottom to top):
+      z-0  – dark background base
+      z-[1] – left/right side images (blurred, faded inward)
+      z-[2] – inner vignette: darkens outer edges, highlights the centre content strip
+      z-10 – main content
+  -->
+  <div class="relative overflow-hidden" style="background: linear-gradient(135deg, #0f0c1a 0%, #1a0e2e 40%, #130d1f 60%, #0f0c1a 100%);">
+
+    <!-- Left background decoration image — fades right toward centre -->
     <img
       src="/images/casino-bg-model.jpg"
       alt=""
       aria-hidden="true"
-      class="pointer-events-none absolute inset-y-0 left-0 z-0 h-full w-48 select-none object-cover object-center opacity-25 blur-sm lg:w-64"
+      class="pointer-events-none absolute inset-y-0 left-0 z-[1] h-full w-56 select-none object-cover object-top opacity-35 blur-[3px] lg:w-72"
+      style="mask-image: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0) 100%); -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0) 100%);"
     />
-    <!-- Right background decoration image (mirrored horizontally) -->
+
+    <!-- Right background decoration image — mirrored, fades left toward centre -->
     <img
       src="/images/casino-bg-model.jpg"
       alt=""
       aria-hidden="true"
-      class="pointer-events-none absolute inset-y-0 right-0 z-0 h-full w-48 select-none object-cover object-center opacity-25 blur-sm lg:w-64"
-      style="transform: scaleX(-1);"
+      class="pointer-events-none absolute inset-y-0 right-0 z-[1] h-full w-56 select-none object-cover object-top opacity-35 blur-[3px] lg:w-72"
+      style="transform: scaleX(-1); mask-image: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0) 100%); -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0) 100%);"
     />
-    <!-- Main content sits above the decorative images -->
+
+    <!-- Vignette: deepens the outer edges and softly highlights the central content strip -->
+    <div
+      class="pointer-events-none absolute inset-0 z-[2]"
+      aria-hidden="true"
+      style="background: radial-gradient(ellipse 70% 100% at 50% 50%, transparent 40%, rgba(8,4,16,0.55) 100%);"
+    />
+
+    <!-- Subtle top/bottom edge darkening for depth -->
+    <div
+      class="pointer-events-none absolute inset-x-0 top-0 z-[2] h-16"
+      aria-hidden="true"
+      style="background: linear-gradient(to bottom, rgba(8,4,16,0.4), transparent);"
+    />
+    <div
+      class="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-16"
+      aria-hidden="true"
+      style="background: linear-gradient(to top, rgba(8,4,16,0.4), transparent);"
+    />
+
+    <!-- Main content sits above all background layers -->
     <div class="relative z-10 mx-auto max-w-screen-xl space-y-12 px-4 py-10">
     <section v-for="section in brandSections" :key="section.id">
       <div class="mb-5 flex items-center gap-2">
         <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
-        <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">{{ section.title }}</h2>
+        <h2 class="font-sans text-lg font-bold tracking-tight text-white">{{ section.title }}</h2>
       </div>
 
       <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
@@ -101,7 +131,7 @@ function formatBrandLabel(alt: string, prefix: string) {
         >
           <div class="flex items-center gap-2">
             <span class="block h-5 w-1 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-            <h2 class="truncate font-sans text-lg font-bold tracking-tight text-foreground">
+            <h2 class="truncate font-sans text-lg font-bold tracking-tight text-white">
               {{ section.title }}
             </h2>
           </div>
