@@ -89,7 +89,7 @@ const handleDirect = (path: string, product: string) => {
 </script>
 
 <template>
-  <div class="">
+  <div class="hot-games-wrapper">
     <div
       class="pointer-events-none absolute inset-0 hidden bg-[url('/images/bg/hot.png')] bg-[length:100%_100%] bg-no-repeat md:block"
       aria-hidden="true"
