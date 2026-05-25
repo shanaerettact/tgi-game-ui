@@ -89,7 +89,7 @@ const handleDirect = (path: string, product: string) => {
 </script>
 
 <template>
-  <div class="">
+  <div class="mobile-gaming-bg">
     <div
       class="pointer-events-none absolute inset-0 hidden bg-[url('/images/bg/hot.png')] bg-[length:100%_100%] bg-no-repeat md:block"
       aria-hidden="true"
@@ -101,7 +101,7 @@ const handleDirect = (path: string, product: string) => {
         @mouseenter="stopSliderAutoplay"
         @mouseleave="startSliderAutoplay"
       >
-        <div class="relative  min-h-[100px] sm:min-h-[100px] md:min-h-[240px]">
+        <div class="relative min-h-[100px] sm:min-h-[100px] md:min-h-[240px]">
           <img
             v-for="(slide, index) in sliderSlides"
             :key="slide.id"
@@ -149,67 +149,132 @@ const handleDirect = (path: string, product: string) => {
       </section>
 
       <section v-for="section in brandSections" :key="section.id">
-      <div class="mt-8 flex items-center gap-2">
-        <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
-        <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">{{ $t(`nav.${section.id}`) }}</h2>
-      </div>
+        <div class="mt-8 flex items-center gap-2">
+          <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
+          <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">{{ $t(`nav.${section.id}`) }}</h2>
+        </div>
 
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <div
-          v-for="brand in section.images"
-          :key="`${section.id}-${brand.alt}`"
-          class="group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
-          @click="handleDirect(section.id, brand.alt)"
-        >
-          <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
-            <img
-              :src="brand.src"
-              :alt="brand.alt"
-              class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
-            />
+        <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
+          <div
+            v-for="brand in section.images"
+            :key="`${section.id}-${brand.alt}`"
+            class="group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
+            @click="handleDirect(section.id, brand.alt)"
+          >
+            <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
+              <img
+                :src="brand.src"
+                :alt="brand.alt"
+                class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section>
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <div
-          v-for="section in rowBrandSections"
-          :key="section.id"
-          class="flex min-w-0 flex-col gap-1"
-          :class="section.images.length > 1 ? 'col-span-2' : 'col-span-1'"
-        >
-          <div class="flex items-center gap-2">
-            <span class="block h-5 w-1 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-            <h2 class="truncate font-sans text-lg font-bold tracking-tight text-foreground">
-              {{ $t(`nav.${section.id}`) }}
-            </h2>
-          </div>
-
+      <section>
+        <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
           <div
-            class="grid gap-3"
-            :class="section.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'"
+            v-for="section in rowBrandSections"
+            :key="section.id"
+            class="flex min-w-0 flex-col gap-1"
+            :class="section.images.length > 1 ? 'col-span-2' : 'col-span-1'"
           >
+            <div class="flex items-center gap-2">
+              <span class="block h-5 w-1 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+              <h2 class="truncate font-sans text-lg font-bold tracking-tight text-foreground">
+                {{ $t(`nav.${section.id}`) }}
+              </h2>
+            </div>
+
             <div
-              v-for="brand in section.images"
-              :key="`${section.id}-${brand.alt}`"
-              class="group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
-              @click="handleDirect(section.id, brand.alt)"
+              class="grid gap-3"
+              :class="section.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'"
             >
-              <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
-                <img
-                  :src="brand.src"
-                  :alt="brand.alt"
-                  class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
-                />
+              <div
+                v-for="brand in section.images"
+                :key="`${section.id}-${brand.alt}`"
+                class="group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
+                @click="handleDirect(section.id, brand.alt)"
+              >
+                <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
+                  <img
+                    :src="brand.src"
+                    :alt="brand.alt"
+                    class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     </div>
   </div>
   <BackToTop />
 </template>
+
+<style scoped>
+/*
+ * Mobile gaming-themed background — only active below md (< 768px).
+ * Pure CSS: SVG data-URI tiling patterns + CSS gradients.
+ * Colors are hardcoded to match the default --primary (#CD4FD6) but remain
+ * visually harmonious across all themes because opacities are low.
+ * Desktop (md+) continues to use the existing hot.png background unchanged.
+ */
+
+.mobile-gaming-bg {
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .mobile-gaming-bg {
+    background-color: var(--background);
+    background-image:
+      /* Fine diamond lattice — tightest layer */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M20 2 L38 20 L20 38 L2 20 Z' fill='none' stroke='%23CD4FD6' stroke-width='0.5' stroke-opacity='0.18'/%3E%3C/svg%3E"),
+      /* Larger diamond with centred dot — mid layer */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 4 L76 40 L40 76 L4 40 Z' fill='none' stroke='%23CD4FD6' stroke-width='0.7' stroke-opacity='0.10'/%3E%3Ccircle cx='40' cy='40' r='2.5' fill='%23CD4FD6' fill-opacity='0.13'/%3E%3C/svg%3E"),
+      /* Scattered glint dots — sparse accent layer */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Ccircle cx='20' cy='22' r='1.2' fill='%23CD4FD6' fill-opacity='0.30'/%3E%3Ccircle cx='100' cy='14' r='0.9' fill='%23CD4FD6' fill-opacity='0.20'/%3E%3Ccircle cx='60' cy='62' r='1.6' fill='%23CD4FD6' fill-opacity='0.22'/%3E%3Ccircle cx='10' cy='92' r='1.0' fill='%23CD4FD6' fill-opacity='0.18'/%3E%3Ccircle cx='112' cy='80' r='1.3' fill='%23CD4FD6' fill-opacity='0.25'/%3E%3Ccircle cx='42' cy='108' r='0.9' fill='%23CD4FD6' fill-opacity='0.16'/%3E%3C/svg%3E"),
+      /* Top-edge radial glow */
+      radial-gradient(
+        ellipse 90% 45% at 50% -5%,
+        color-mix(in srgb, var(--primary) 14%, transparent) 0%,
+        transparent 70%
+      );
+    background-size:
+      40px 40px,
+      80px 80px,
+      120px 120px,
+      100% 55%;
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      center top;
+    background-repeat:
+      repeat,
+      repeat,
+      repeat,
+      no-repeat;
+  }
+
+  /* Subtle bottom-edge glow for depth */
+  .mobile-gaming-bg::after {
+    content: '';
+    pointer-events: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: radial-gradient(
+      ellipse 80% 60% at 50% 120%,
+      color-mix(in srgb, var(--primary) 10%, transparent) 0%,
+      transparent 70%
+    );
+    z-index: 0;
+  }
+}
+</style>
