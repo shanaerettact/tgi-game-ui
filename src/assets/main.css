@@ -129,46 +129,59 @@
 }
 
 /* ============================================================
-   MOBILE GAMING THEME  (max-width: 1023px  —  CSS-only)
-   Targets the home/game pages rendered by HotGames.vue /
-   GameGrid.vue without touching any .vue source files.
+   MOBILE GAMING THEME — BRIGHT EDITION  (max-width: 1023px)
+   Vibrant light-mode gaming aesthetic using only CSS.
+   No .vue source files are modified.
    ============================================================ */
 
-/* ── CSS custom properties used only by this block ── */
+/* ── CSS custom properties for the bright theme ── */
 @media (max-width: 1023px) {
   :root {
-    --mg-dark:       #0a0c14;
-    --mg-dark-2:     #0f1221;
-    --mg-purple:     #6c3fc5;
-    --mg-purple-mid: #4b2fa3;
-    --mg-cyan:       #00d4ff;
-    --mg-gold:       #ffc947;
-    --mg-red:        #e5132d;
-    --mg-glow-p:     rgba(108, 63, 197, 0.35);
-    --mg-glow-c:     rgba(0, 212, 255, 0.18);
-    --mg-glow-g:     rgba(255, 201, 71, 0.22);
+    --mg-bg:         #f4f0ff;
+    --mg-bg2:        #fff5f0;
+    --mg-purple:     #7c3aed;
+    --mg-purple-lt:  #a78bfa;
+    --mg-coral:      #f4522a;
+    --mg-orange:     #fb923c;
+    --mg-gold:       #f59e0b;
+    --mg-sky:        #0ea5e9;
+    --mg-white:      #ffffff;
+    --mg-ink:        #1a0a2e;
+    --mg-ink-mid:    #3b1f6e;
+    --mg-glow-p:     rgba(124, 58, 237, 0.18);
+    --mg-glow-o:     rgba(244, 82, 42, 0.14);
   }
 }
 
-/* ── 1. Body: deep space base + subtle star-field dots ── */
+/* ── 1. Body: soft lavender-to-peach light base + confetti dots ── */
 @media (max-width: 1023px) {
   body {
-    background-color: var(--mg-dark) !important;
-    /* Tiny dot star-field via radial-gradients */
+    background-color: var(--mg-bg) !important;
     background-image:
-      radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px),
-      radial-gradient(circle, rgba(255,255,255,0.30) 1px, transparent 1px),
-      radial-gradient(circle, rgba(0, 212, 255, 0.40) 1px, transparent 1px),
-      linear-gradient(160deg, #0a0c14 0%, #110e2a 45%, #0d1520 100%) !important;
+      /* Colourful confetti circle dots */
+      radial-gradient(circle, rgba(124, 58, 237, 0.18) 2px, transparent 2px),
+      radial-gradient(circle, rgba(244, 82, 42, 0.14) 2px, transparent 2px),
+      radial-gradient(circle, rgba(245, 158, 11, 0.16) 1.5px, transparent 1.5px),
+      radial-gradient(circle, rgba(14, 165, 233, 0.12) 1.5px, transparent 1.5px),
+      /* Soft ambient gradient base */
+      linear-gradient(
+        145deg,
+        #f4f0ff 0%,
+        #fce7f3 30%,
+        #fff5f0 60%,
+        #f0f9ff 100%
+      ) !important;
     background-size:
-      180px 180px,
-      110px 110px,
-      260px 260px,
+      140px 140px,
+      90px  90px,
+      200px 200px,
+      170px 170px,
       100% 100% !important;
     background-position:
-      13px 27px,
-      55px 80px,
-      90px 40px,
+      18px 22px,
+      60px 70px,
+      30px 100px,
+      110px 40px,
       0 0 !important;
     background-attachment: fixed !important;
   }
@@ -181,75 +194,65 @@
   }
 }
 
-/* ── 3. Navbar: glassy dark bar with bottom glow line ── */
+/* ── 3. Navbar: crisp white frosted bar with purple-tinted shadow ── */
 @media (max-width: 1023px) {
   header.sticky {
-    background: rgba(10, 12, 20, 0.88) !important;
+    background: rgba(255, 255, 255, 0.90) !important;
     backdrop-filter: blur(14px) !important;
     -webkit-backdrop-filter: blur(14px) !important;
-    border-bottom-color: rgba(108, 63, 197, 0.45) !important;
+    border-bottom-color: rgba(124, 58, 237, 0.20) !important;
     box-shadow:
-      0 1px 0 0 rgba(108, 63, 197, 0.3),
-      0 4px 24px 0 rgba(0, 0, 0, 0.6) !important;
+      0 1px 0 0 rgba(124, 58, 237, 0.12),
+      0 4px 20px 0 rgba(124, 58, 237, 0.08) !important;
   }
 }
 
 /* ── 4. Mobile slide-out menu panel ── */
 @media (max-width: 1023px) {
   header.sticky .lg\:hidden.max-h-\[calc\(100dvh-4rem\)\] {
-    background: rgba(11, 13, 24, 0.97) !important;
-    border-top-color: rgba(108, 63, 197, 0.35) !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    border-top-color: rgba(124, 58, 237, 0.15) !important;
   }
 }
 
-/* ── 5. HotGames root — rich layered background ── */
+/* ── 5. HotGames page background layer (absolute overlay div) ── */
 @media (max-width: 1023px) {
-  /* The outermost wrapper div of HotGames with no extra class */
-  .min-h-screen.md\:bg-\[url\(\'\/images\/bg\/hot\.png\'\)\],
-  /* Also target the plain wrapper div that holds the absolute bg + relative z-10 children */
-  .relative.z-10.mx-auto.max-w-screen-xl {
-    position: relative;
-  }
-
-  /* Inject gaming background into the first anonymous wrapper via the
-     sibling absolute element that already exists in HotGames.vue */
   .pointer-events-none.absolute.inset-0.hidden.bg-\[url\(\'\/images\/bg\/hot\.png\'\)\] {
     display: block !important;
     background-image:
-      /* Hexagonal grid overlay via inline SVG */
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32L28 66zm0 0v34M56 50l-28 16M0 50l28 16' fill='none' stroke='rgba(108%2C63%2C197%2C0.12)' stroke-width='1'/%3E%3C/svg%3E"),
-      /* Diagonal accent lines */
+      /* Diamond / cross grid SVG overlay */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='rgba(124%2C58%2C237%2C0.07)' stroke-width='1'/%3E%3C/svg%3E"),
+      /* Diagonal pastel stripe accent */
       repeating-linear-gradient(
-        -55deg,
+        -48deg,
         transparent,
-        transparent 40px,
-        rgba(0, 212, 255, 0.03) 40px,
-        rgba(0, 212, 255, 0.03) 41px
+        transparent 36px,
+        rgba(244, 82, 42, 0.04) 36px,
+        rgba(244, 82, 42, 0.04) 37px
       ),
-      /* Deep multi-stop gradient */
+      /* Warm-to-cool pastel gradient */
       linear-gradient(
         180deg,
-        #0a0c14 0%,
-        #110e2a 20%,
-        #0d1a2e 50%,
-        #120a1e 80%,
-        #0a0c14 100%
+        #f4f0ff 0%,
+        #fce7f3 25%,
+        #fff5f0 55%,
+        #f0f9ff 100%
       ) !important;
-    background-size: 56px 100px, auto, 100% 100% !important;
+    background-size: 60px 60px, auto, 100% 100% !important;
     background-position: 0 0, 0 0, 0 0 !important;
     opacity: 1 !important;
   }
 }
 
-/* ── 6. Banner / carousel card: glassy with purple glow ── */
+/* ── 6. Banner / carousel card: white with purple-shadow lift ── */
 @media (max-width: 1023px) {
   section[aria-label] .relative.overflow-hidden.rounded-xl.border.border-border.bg-card {
-    background: rgba(15, 12, 32, 0.75) !important;
-    border-color: rgba(108, 63, 197, 0.4) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(124, 58, 237, 0.22) !important;
     box-shadow:
-      0 0 0 1px rgba(108, 63, 197, 0.15),
-      0 8px 32px rgba(0, 0, 0, 0.5),
-      0 0 40px -8px var(--mg-glow-p) !important;
+      0 0 0 1px rgba(124, 58, 237, 0.08),
+      0 6px 24px rgba(124, 58, 237, 0.12),
+      0 2px 8px rgba(0, 0, 0, 0.05) !important;
   }
 }
 
@@ -257,90 +260,97 @@
 @media (max-width: 1023px) {
   /* Active brand card */
   .group.flex.cursor-pointer.flex-col.items-center.gap-1.rounded-lg.border.border-border {
-    border-color: rgba(108, 63, 197, 0.55) !important;
-    background: rgba(20, 14, 44, 0.70) !important;
+    border-color: rgba(124, 58, 237, 0.35) !important;
+    background: rgba(255, 255, 255, 0.88) !important;
     box-shadow:
-      0 0 14px rgba(108, 63, 197, 0.25),
-      inset 0 1px 0 rgba(255,255,255,0.05) !important;
+      0 4px 16px rgba(124, 58, 237, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
   }
 
   /* Inactive brand card */
   .group.flex.cursor-pointer.flex-col.items-center.gap-1.rounded-lg.border {
-    background: rgba(14, 10, 30, 0.55) !important;
+    background: rgba(255, 255, 255, 0.65) !important;
   }
 
-  /* Big brand image wrappers in HotGames */
+  /* Big brand image wrappers */
   .group.flex.cursor-pointer.flex-col.items-center.rounded-xl.p-2 {
-    background: rgba(14, 10, 30, 0.45) !important;
+    background: rgba(255, 255, 255, 0.60) !important;
     border-radius: 0.75rem !important;
-    transition: box-shadow 0.25s ease !important;
+    transition: box-shadow 0.25s ease, background 0.25s ease !important;
   }
   .group.flex.cursor-pointer.flex-col.items-center.rounded-xl.p-2:hover {
-    box-shadow: 0 0 22px rgba(108, 63, 197, 0.4) !important;
+    background: rgba(255, 255, 255, 0.88) !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.22) !important;
   }
 }
 
 /* ── 8. Section divider line ── */
 @media (max-width: 1023px) {
   .mb-6.flex.items-center.gap-3 .h-px.flex-1.bg-border {
-    background: linear-gradient(90deg, transparent, rgba(108, 63, 197, 0.5), transparent) !important;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(124, 58, 237, 0.30),
+      rgba(244, 82, 42, 0.20),
+      transparent
+    ) !important;
   }
 
   .mb-6.flex.items-center.gap-3 .shrink-0.font-sans {
-    color: rgba(0, 212, 255, 0.75) !important;
-    letter-spacing: 0.15em !important;
+    color: var(--mg-purple) !important;
+    letter-spacing: 0.12em !important;
   }
 }
 
-/* ── 9. Section accent bar (the h-5 w-1 vertical stripe) ── */
+/* ── 9. Section accent bar (vertical stripe beside heading) ── */
 @media (max-width: 1023px) {
   .block.h-5.w-1.rounded-full.bg-primary,
   .block.h-5.w-1.shrink-0.rounded-full.bg-primary {
-    background: linear-gradient(180deg, var(--mg-cyan), var(--mg-purple)) !important;
-    box-shadow: 0 0 8px var(--mg-cyan) !important;
+    background: linear-gradient(180deg, var(--mg-coral), var(--mg-purple)) !important;
+    box-shadow: 0 0 6px rgba(244, 82, 42, 0.35) !important;
   }
 }
 
 /* ── 10. Section heading text ── */
 @media (max-width: 1023px) {
   .font-sans.text-lg.font-bold.tracking-tight.text-foreground {
-    color: #e8eaf6 !important;
-    text-shadow: 0 0 12px rgba(0, 212, 255, 0.3) !important;
+    color: var(--mg-ink) !important;
   }
 }
 
-/* ── 11. Game name labels ── */
+/* ── 11. Muted / label text ── */
 @media (max-width: 1023px) {
   .font-sans.text-.font-semibold.uppercase.tracking-widest.text-muted-foreground {
-    color: rgba(180, 180, 220, 0.7) !important;
+    color: rgba(59, 31, 110, 0.55) !important;
   }
 }
 
-/* ── 12. Brand grid brand-selection panel background ── */
+/* ── 12. Brand grid selection panel ── */
 @media (max-width: 1023px) {
   .mb-6.rounded-2xl.px-3.pt-1\.5.pb-2 {
-    background: rgba(12, 9, 28, 0.65) !important;
-    border: 1px solid rgba(108, 63, 197, 0.2) !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    border: 1px solid rgba(124, 58, 237, 0.15) !important;
     border-radius: 1rem !important;
-    backdrop-filter: blur(6px) !important;
-    -webkit-backdrop-filter: blur(6px) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    box-shadow: 0 2px 12px rgba(124, 58, 237, 0.08) !important;
   }
 }
 
-/* ── 13. Footer: deep dark with subtle top glow ── */
+/* ── 13. Footer: white with subtle purple-tinted top border ── */
 @media (max-width: 1023px) {
   footer.bg-card {
-    background: rgba(8, 7, 18, 0.92) !important;
-    border-top-color: rgba(108, 63, 197, 0.3) !important;
-    box-shadow: 0 -1px 0 0 rgba(108, 63, 197, 0.2) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-top-color: rgba(124, 58, 237, 0.18) !important;
+    box-shadow: 0 -2px 12px rgba(124, 58, 237, 0.06) !important;
   }
 
   footer .text-muted-foreground {
-    color: rgba(160, 160, 200, 0.65) !important;
+    color: rgba(59, 31, 110, 0.55) !important;
   }
 
   footer .border-t.border-border {
-    border-top-color: rgba(108, 63, 197, 0.2) !important;
+    border-top-color: rgba(124, 58, 237, 0.12) !important;
   }
 }
 
@@ -351,43 +361,44 @@
     height: 4px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--mg-dark);
+    background: #f4f0ff;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--mg-purple-mid);
+    background: var(--mg-purple-lt);
     border-radius: 2px;
   }
 }
 
-/* ── 15. Primary-colored buttons / active nav pill ── */
+/* ── 15. Primary buttons / active nav pill ── */
 @media (max-width: 1023px) {
   .bg-primary.text-primary-foreground.shadow-sm {
-    background: linear-gradient(135deg, var(--mg-purple), var(--mg-purple-mid)) !important;
-    box-shadow: 0 0 14px rgba(108, 63, 197, 0.45) !important;
+    background: linear-gradient(135deg, var(--mg-coral), var(--mg-purple)) !important;
+    box-shadow: 0 4px 14px rgba(244, 82, 42, 0.30) !important;
+    color: #ffffff !important;
   }
 }
 
 /* ── 16. Carousel dot indicators ── */
 @media (max-width: 1023px) {
   .w-6.bg-primary {
-    background: var(--mg-cyan) !important;
-    box-shadow: 0 0 6px var(--mg-cyan) !important;
+    background: var(--mg-purple) !important;
+    box-shadow: 0 0 6px rgba(124, 58, 237, 0.40) !important;
   }
   .w-2.bg-primary\/30 {
-    background: rgba(0, 212, 255, 0.25) !important;
+    background: rgba(124, 58, 237, 0.22) !important;
   }
 }
 
-/* ── 17. Carousel prev/next buttons ── */
+/* ── 17. Carousel prev/next arrow buttons ── */
 @media (max-width: 1023px) {
   .rounded-full.bg-primary\/35,
   .rounded-full.bg-primary\/90 {
-    background: rgba(108, 63, 197, 0.55) !important;
-    box-shadow: 0 0 10px rgba(108, 63, 197, 0.4) !important;
+    background: rgba(124, 58, 237, 0.75) !important;
+    box-shadow: 0 2px 10px rgba(124, 58, 237, 0.30) !important;
   }
 }
 
-/* ── 18. Subtle animated shimmer line at top of page ── */
+/* ── 18. Animated rainbow shimmer line at top of page ── */
 @media (max-width: 1023px) {
   body::before {
     content: '';
@@ -396,18 +407,19 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
+    height: 3px;
     z-index: 9999;
     background: linear-gradient(
       90deg,
-      transparent 0%,
-      var(--mg-cyan) 30%,
-      var(--mg-purple) 55%,
-      var(--mg-gold) 80%,
-      transparent 100%
+      var(--mg-purple)  0%,
+      var(--mg-sky)     20%,
+      var(--mg-coral)   40%,
+      var(--mg-gold)    60%,
+      var(--mg-purple)  80%,
+      var(--mg-sky)     100%
     );
     background-size: 200% 100%;
-    animation: mg-shimmer 3.5s linear infinite;
+    animation: mg-shimmer 3s linear infinite;
     pointer-events: none;
   }
 
@@ -417,23 +429,23 @@
   }
 }
 
-/* ── 19. Glowing corner accent on GameGrid game cells ── */
+/* ── 19. GameGrid game cells ── */
 @media (max-width: 1023px) {
   .grid.grid-cols-2.gap-1\.5 .group.flex.cursor-pointer.flex-col.items-center.p-3 {
     border-radius: 0.625rem !important;
-    background: rgba(14, 10, 28, 0.5) !important;
+    background: rgba(255, 255, 255, 0.60) !important;
     transition: background 0.2s ease, box-shadow 0.2s ease !important;
   }
   .grid.grid-cols-2.gap-1\.5 .group.flex.cursor-pointer.flex-col.items-center.p-3:hover {
-    background: rgba(28, 16, 56, 0.75) !important;
-    box-shadow: 0 0 18px rgba(108, 63, 197, 0.35) !important;
+    background: rgba(255, 255, 255, 0.90) !important;
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.18) !important;
   }
 }
 
 /* ── 20. "No games" empty state ── */
 @media (max-width: 1023px) {
   .py-16.text-center.text-muted-foreground {
-    color: rgba(0, 212, 255, 0.5) !important;
+    color: rgba(124, 58, 237, 0.50) !important;
   }
 }
 
