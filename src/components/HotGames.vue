@@ -89,14 +89,14 @@ const handleDirect = (path: string, product: string) => {
 </script>
 
 <template>
-  <div class="">
+  <div class="hg-root">
     <div
       class="pointer-events-none absolute inset-0 hidden bg-[url('/images/bg/hot.png')] bg-[length:100%_100%] bg-no-repeat md:block"
       aria-hidden="true"
     />
     <div class="relative z-10 mx-auto max-w-screen-xl space-y-12 px-4 mt-10">
       <section
-        class="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm mb-4"
+        class="hg-carousel relative overflow-hidden rounded-xl border border-border bg-card shadow-sm mb-4"
         aria-label="轮播图"
         @mouseenter="stopSliderAutoplay"
         @mouseleave="startSliderAutoplay"
@@ -149,67 +149,178 @@ const handleDirect = (path: string, product: string) => {
       </section>
 
       <section v-for="section in brandSections" :key="section.id">
-      <div class="mt-8 flex items-center gap-2">
-        <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
-        <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">{{ $t(`nav.${section.id}`) }}</h2>
-      </div>
+        <div class="hg-section-header mt-8 flex items-center gap-2">
+          <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
+          <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">{{ $t(`nav.${section.id}`) }}</h2>
+        </div>
 
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <div
-          v-for="brand in section.images"
-          :key="`${section.id}-${brand.alt}`"
-          class="group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
-          @click="handleDirect(section.id, brand.alt)"
-        >
-          <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
-            <img
-              :src="brand.src"
-              :alt="brand.alt"
-              class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
-            />
+        <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
+          <div
+            v-for="brand in section.images"
+            :key="`${section.id}-${brand.alt}`"
+            class="hg-card group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
+            @click="handleDirect(section.id, brand.alt)"
+          >
+            <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
+              <img
+                :src="brand.src"
+                :alt="brand.alt"
+                class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section>
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <div
-          v-for="section in rowBrandSections"
-          :key="section.id"
-          class="flex min-w-0 flex-col gap-1"
-          :class="section.images.length > 1 ? 'col-span-2' : 'col-span-1'"
-        >
-          <div class="flex items-center gap-2">
-            <span class="block h-5 w-1 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-            <h2 class="truncate font-sans text-lg font-bold tracking-tight text-foreground">
-              {{ $t(`nav.${section.id}`) }}
-            </h2>
-          </div>
-
+      <section>
+        <div class="grid grid-cols-2 gap-3 lg:grid-cols-5">
           <div
-            class="grid gap-3"
-            :class="section.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'"
+            v-for="section in rowBrandSections"
+            :key="section.id"
+            class="flex min-w-0 flex-col gap-1"
+            :class="section.images.length > 1 ? 'col-span-2' : 'col-span-1'"
           >
+            <div class="hg-section-header flex items-center gap-2">
+              <span class="block h-5 w-1 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+              <h2 class="truncate font-sans text-lg font-bold tracking-tight text-foreground">
+                {{ $t(`nav.${section.id}`) }}
+              </h2>
+            </div>
+
             <div
-              v-for="brand in section.images"
-              :key="`${section.id}-${brand.alt}`"
-              class="group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
-              @click="handleDirect(section.id, brand.alt)"
+              class="grid gap-3"
+              :class="section.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'"
             >
-              <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
-                <img
-                  :src="brand.src"
-                  :alt="brand.alt"
-                  class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
-                />
+              <div
+                v-for="brand in section.images"
+                :key="`${section.id}-${brand.alt}`"
+                class="hg-card group flex cursor-pointer flex-col items-center rounded-xl p-2 transition-all duration-200"
+                @click="handleDirect(section.id, brand.alt)"
+              >
+                <div class="flex h-40 w-full items-center justify-center p-1 sm:h-44 md:h-48 lg:h-52 xl:h-56">
+                  <img
+                    :src="brand.src"
+                    :alt="brand.alt"
+                    class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     </div>
   </div>
   <BackToTop />
 </template>
+
+<style scoped>
+/* =====================================================
+   Mobile-only visual enhancements for HotGames
+   CSS-only — no element dimensions or layout altered.
+   ===================================================== */
+
+@media (max-width: 767px) {
+  /* ── Full-page tiled dark diamond-grid background ── */
+  .hg-root {
+    background-color: #0d0b14;
+    background-image: url('/images/bg/hotgames-pattern.jpg');
+    background-size: 320px 320px;
+    background-repeat: repeat;
+    position: relative;
+  }
+
+  /* Purple gradient overlay on top of the tiled pattern */
+  .hg-root::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      160deg,
+      rgba(13, 8, 20, 0.50) 0%,
+      rgba(60, 10, 90, 0.28) 50%,
+      rgba(13, 8, 20, 0.60) 100%
+    );
+    z-index: 0;
+  }
+
+  /* ── Carousel glow border ─────────────────────────── */
+  .hg-carousel {
+    border-color: rgba(205, 79, 214, 0.40) !important;
+    box-shadow:
+      0 0 0 1px rgba(205, 79, 214, 0.18),
+      0 4px 28px rgba(205, 79, 214, 0.25),
+      0 1px 6px rgba(0, 0, 0, 0.60) !important;
+  }
+
+  /* ── Section heading strip with neon glow background ─ */
+  .hg-section-header {
+    background-image: url('/images/bg/section-header-glow.jpg');
+    background-size: cover;
+    background-position: left center;
+    border-radius: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.75rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Dark scrim over the glow for text legibility */
+  .hg-section-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 4, 16, 0.65);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* Keep children above the scrim */
+  .hg-section-header > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Heading text: bright lavender with purple glow */
+  .hg-section-header h2 {
+    color: #f0e6ff !important;
+    text-shadow: 0 0 14px rgba(205, 79, 214, 0.70);
+  }
+
+  /* Accent pip: neon glow */
+  .hg-section-header span[aria-hidden] {
+    box-shadow: 0 0 8px 2px rgba(205, 79, 214, 0.85);
+  }
+
+  /* ── Game brand card tiles ───────────────────────── */
+  .hg-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(205, 79, 214, 0.20);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 2px 14px rgba(0, 0, 0, 0.50);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hg-card:hover {
+    background: rgba(205, 79, 214, 0.08);
+    border-color: rgba(205, 79, 214, 0.42);
+    box-shadow:
+      0 0 0 1px rgba(205, 79, 214, 0.24),
+      0 6px 28px rgba(205, 79, 214, 0.28);
+  }
+
+  .hg-card:active {
+    background: rgba(205, 79, 214, 0.14);
+    border-color: rgba(205, 79, 214, 0.55);
+    box-shadow:
+      0 0 0 2px rgba(205, 79, 214, 0.32),
+      0 4px 20px rgba(205, 79, 214, 0.32);
+  }
+}
+</style>
