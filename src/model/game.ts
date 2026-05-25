@@ -8,6 +8,11 @@ export class ReqGameLaunch {
   platform = 0; // 平台(0=Desktop,1=Mobile)
 }
 
+export class RespGameLaunch {
+  gameUrl = ""; // 遊戲連結
+  playerSessionKey = "";
+}
+
 export class ReqGameDemo {
   language = "en"; // 語系代碼
   gameId = ""; // 遊戲識別碼

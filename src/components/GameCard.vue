@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils'
+import { useGameStore } from '@/store/module/game';
+
+const gameStore = useGameStore()
 
 export interface Game {
-  id: number
+  gameId: string
   name: string
-  nameEn: string
   image: string
-  category: string
-  provider: string
-  rtp: string | null
-  hot: boolean
-  new: boolean
-  rating: number
 }
 
 export interface BrandItem {
@@ -19,6 +15,7 @@ export interface BrandItem {
   alt: string
   label: string
   gameKey: string
+  productId: string
 }
 
 const props = defineProps<{
@@ -26,6 +23,16 @@ const props = defineProps<{
   brand?: BrandItem
   active?: boolean
 }>()
+
+const fallbackImage = '/images/newgame.png'
+
+function useFallbackImage(event: Event) {
+  const img = event.currentTarget as HTMLImageElement
+
+  if (img.src.endsWith(fallbackImage)) return
+
+  img.src = fallbackImage
+}
 </script>
 
 <template>
@@ -54,13 +61,15 @@ const props = defineProps<{
   <div
     v-else-if="game"
     class="group flex cursor-pointer flex-col items-center p-3 transition-all duration-200 hover:border-primary/40"
+    @click="gameStore.gameLaunch(game.gameId)"
   >
     <div
       class="flex  w-full items-center justify-center rounded-lg p-1"
     >
       <img
         :src="game.image"
-        :alt="game.nameEn"
+        :alt="game.name"
+        @error="useFallbackImage"
         class="h-full w-full rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
       />
     </div>

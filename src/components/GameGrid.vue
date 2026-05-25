@@ -1,46 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { Trophy, Gamepad2, Users, Zap, Flame, type LucideIcon } from 'lucide-vue-next'
-import { cn } from '@/lib/utils'
+import { ref, onMounted, watch } from 'vue'
+import { useGameStore } from '@/store/module/game';
 import GameCard, { type BrandItem, type Game } from './GameCard.vue'
-import { getBrandGameImages, resolveBrandGameKey } from '@/lib/brandGames'
+import { useI18n } from 'vue-i18n';
+import { useLangStore } from '@/store/module/lang';
 
-const categoryBrandFiles: Record<string, { folder: string; files: string[] }> = {
-  chess: { folder: 'chess', files: ['kx_chess.png'] },
-  live: { folder: 'live', files: ['eeai_live.png', 'mt_live.png'] },
-  slots: { folder: 'slot', files: ['antplay_slot.png', 'as_slot.png', 'gb_slot.png', 'glc_slot.png', 'pg_slot.png'] },
-  sports: { folder: 'sport', files: ['fb_sport.png'] },
-  lottery: { folder: 'lottery', files: ['ltg_lottery.png'] },
-}
+const { t } = useI18n();
+const langStore = useLangStore()
+const gameStore = useGameStore()
 
-function formatBrandLabel(file: string) {
-  const base = file.replace(/\.png$/i, '').split('_')[0]
-  return base.toUpperCase()
-}
-
-function formatGameName(imagePath: string) {
-  const filename = imagePath.split('/').pop()?.replace(/\.png$/i, '') ?? ''
-  const stripped = filename
-    .replace(/^(kx_chess_|eeai_live_|mt_live_|antplay_slot_|as_slot_|gb_slot_slots-|gb_slot_|glc_slot_|pg_slot_|fb_sport_|ltg_lottery_)/i, '')
-    .replace(/[-_]/g, ' ')
-    .trim()
-  return stripped || filename
-}
-
-function buildGamesFromBrandImages(images: string[], category: string, provider: string): Game[] {
-  return images.map((image, index) => ({
-    id: index + 1,
-    name: formatGameName(image),
-    nameEn: formatGameName(image),
-    image,
-    category,
-    provider,
-    rtp: null,
-    hot: false,
-    new: false,
-    rating: 4.5,
-  }))
-}
+const imgUrl = import.meta.env.VITE_TGI_IMG_URL
 
 const props = withDefaults(
   defineProps<{
@@ -57,320 +26,109 @@ const props = withDefaults(
   },
 )
 
-const categories: { id: string; label: string; labelEn: string; icon: LucideIcon }[] = [
-  { id: 'all', label: '全部', labelEn: 'All Games', icon: Flame },
-  { id: 'slots', label: '电子', labelEn: 'Slots', icon: Gamepad2 },
-  { id: 'live', label: '真人', labelEn: 'Live Casino', icon: Users },
-  { id: 'sports', label: '体育', labelEn: 'Sports', icon: Trophy },
-  { id: 'lottery', label: '彩票', labelEn: 'Lottery', icon: Zap },
-]
+const categoryMap = new Map<String, { productType: number;}>([
+  ['chess', { productType: 5 }],
+  ['live', { productType: 4 }],
+  ['slots', { productType: 1 }],
+  ['sports', { productType: 2 }],
+  ['lottery', { productType: 3 }],
+])
 
-const games: Game[] = [
-  {
-    id: 1,
-    name: '幸运财神',
-    nameEn: 'Lucky Fortune',
-    image: '/images/brand/slot/slot_pg.png',
-    category: 'slots',
-    provider: 'PG Soft',
-    rtp: '96.8%',
-    hot: true,
-    new: false,
-    rating: 4.9,
-  },
-  {
-    id: 2,
-    name: '狂野之旅',
-    nameEn: 'Wild Safari',
-    image: '/images/brand/slot/slot_pp.png',
-    category: 'slots',
-    provider: 'Pragmatic',
-    rtp: '95.5%',
-    hot: false,
-    new: true,
-    rating: 4.7,
-  },
-  {
-    id: 3,
-    name: '钻石狂热',
-    nameEn: 'Diamond Rush',
-    image: '/images/brand/slot/slot_mga.png',
-    category: 'slots',
-    provider: 'MGA',
-    rtp: '97.2%',
-    hot: true,
-    new: false,
-    rating: 4.8,
-  },
-  {
-    id: 4,
-    name: 'JDB 电子',
-    nameEn: 'JDB Slots',
-    image: '/images/brand/slot/slot_jdb.png',
-    category: 'slots',
-    provider: 'JDB',
-    rtp: '96.1%',
-    hot: false,
-    new: false,
-    rating: 4.6,
-  },
-  {
-    id: 5,
-    name: '真人百家乐',
-    nameEn: 'Live Baccarat',
-    image: '/images/brand/live/live_ag.png',
-    category: 'live',
-    provider: 'AG',
-    rtp: '98.9%',
-    hot: true,
-    new: false,
-    rating: 4.9,
-  },
-  {
-    id: 6,
-    name: 'BBIN 真人',
-    nameEn: 'BBIN Live',
-    image: '/images/brand/live/live_bbin.png',
-    category: 'live',
-    provider: 'BBIN',
-    rtp: '98.5%',
-    hot: true,
-    new: false,
-    rating: 4.8,
-  },
-  {
-    id: 7,
-    name: 'BG 真人',
-    nameEn: 'BG Live',
-    image: '/images/brand/live/live_bg.png',
-    category: 'live',
-    provider: 'BG',
-    rtp: '98.2%',
-    hot: false,
-    new: true,
-    rating: 4.7,
-  },
-  {
-    id: 8,
-    name: '足球赛事',
-    nameEn: 'Football Betting',
-    image: '/images/brand/sport/sport_fb.png',
-    category: 'sports',
-    provider: 'FB Sports',
-    rtp: null,
-    hot: true,
-    new: false,
-    rating: 4.8,
-  },
-  {
-    id: 9,
-    name: 'BTI 体育',
-    nameEn: 'BTI Sports',
-    image: '/images/brand/sport/sport_bti.png',
-    category: 'sports',
-    provider: 'BTI',
-    rtp: null,
-    hot: false,
-    new: false,
-    rating: 4.6,
-  },
-  {
-    id: 10,
-    name: '即开彩票',
-    nameEn: 'Instant Lottery',
-    image: '/images/brand/lottery/lottery_db.png',
-    category: 'lottery',
-    provider: 'DB Lottery',
-    rtp: '93.0%',
-    hot: true,
-    new: true,
-    rating: 4.4,
-  },
-  {
-    id: 11,
-    name: '闪电彩票',
-    nameEn: 'Lightning Lottery',
-    image: '/images/brand/lottery/lottery_lightning.png',
-    category: 'lottery',
-    provider: 'Lightning',
-    rtp: '92.5%',
-    hot: false,
-    new: false,
-    rating: 4.3,
-  },
-  {
-    id: 12,
-    name: 'DB 棋牌',
-    nameEn: 'DB Chess',
-    image: '/images/brand/chess/chess_db.png',
-    category: 'chess',
-    provider: 'DB',
-    rtp: null,
-    hot: true,
-    new: false,
-    rating: 4.8,
-  },
-  {
-    id: 13,
-    name: '开元棋牌',
-    nameEn: 'KY Chess',
-    image: '/images/brand/chess/chess_ky.png',
-    category: 'chess',
-    provider: 'KY',
-    rtp: null,
-    hot: true,
-    new: false,
-    rating: 4.7,
-  },
-  {
-    id: 14,
-    name: 'KS 棋牌',
-    nameEn: 'KS Chess',
-    image: '/images/brand/chess/chess_ks.png',
-    category: 'chess',
-    provider: 'KS',
-    rtp: null,
-    hot: false,
-    new: true,
-    rating: 4.6,
-  },
-  {
-    id: 15,
-    name: '欢乐棋牌',
-    nameEn: 'HL Chess',
-    image: '/images/brand/chess/chess_hl.png',
-    category: 'chess',
-    provider: 'HL',
-    rtp: null,
-    hot: false,
-    new: false,
-    rating: 4.5,
-  },
-]
+const activeProduct = ref('')
 
-const activeCategory = ref('all')
+const categoryBrands = ref<BrandItem[]>([])
 
-const filtered = computed(() => {
-  if (props.showCategoryTabs) {
-    return activeCategory.value === 'all'
-      ? games
-      : games.filter((g) => g.category === activeCategory.value)
+const displayGames = ref<Game[]>([])
+
+const setCateAndGame = async () => {
+  await gameStore.getGameList()
+
+  const type = categoryMap.get(props.category)?.productType
+  const navIndex = gameStore.respDemoGameList.navs.findIndex(d => d.productType == type)
+  const gameItems = gameStore.respDemoGameList.gameItems[navIndex]
+  if (gameItems) {
+    activeProduct.value = gameItems[0].productId
+
+    if (gameStore.productFromHot) {
+      activeProduct.value = gameStore.productFromHot
+      gameStore.productFromHot = ''
+    }
+
+    categoryBrands.value = gameItems.map(d => {
+      return {
+        src: `${imgUrl}/logo/${d.productId}.png`,
+        alt: d.productId,
+        label: d.productId.toUpperCase(),
+        gameKey: `${props.category}-${d.productId}`,
+        productId: d.productId,
+      }
+    })
+
+    changeGame(activeProduct.value)
   }
+}
 
-  if (props.category === 'home') {
-    return games.filter((g) => g.hot)
+const changeGame = (productId: string) => {
+  activeProduct.value = productId
+
+  const games = gameStore.respDemoGameList.datas.find(d => d.productId == activeProduct.value)?.games;
+  if (games) {
+    displayGames.value = games.map(d => {
+      return {
+        gameId: d.gameId,
+        name: t(`game_name.${d.gameId}`),
+        image: `${imgUrl}/game/${d.gameId}.png`,
+      }
+    })
   }
+}
 
-  return games.filter((g) => g.category === props.category)
-})
-
-const categoryBrands = computed<BrandItem[]>(() => {
-  if (props.showCategoryTabs) return []
-
-  const config = categoryBrandFiles[props.category]
-  if (!config) return []
-
-  return config.files.map((file) => ({
-    src: `/images/brand/${config.folder}/${file}`,
-    alt: file.replace(/\.png$/i, ''),
-    label: formatBrandLabel(file),
-    gameKey: resolveBrandGameKey(config.folder, file),
-  }))
-})
-
-const activeBrandSrc = ref<string | null>(null)
-
-const displayGames = computed(() => {
-  if (categoryBrands.value.length > 0) {
-    const activeBrand = categoryBrands.value.find((brand) => brand.src === activeBrandSrc.value)
-    if (!activeBrand) return []
-
-    const images = getBrandGameImages(activeBrand.gameKey)
-    return buildGamesFromBrandImages(images, props.category, activeBrand.label)
-  }
-
-  return filtered.value
+onMounted(async () => {
+  await setCateAndGame()
 })
 
 watch(
-  categoryBrands,
-  (brands) => {
-    activeBrandSrc.value = brands[0]?.src ?? null
-  },
-  { immediate: true },
+  () => langStore.current,
+  async (newVal) => {
+    await langStore.getGameLang(newVal);
+    changeGame(activeProduct.value)
+  }
 )
-
-function selectBrand(src: string) {
-  activeBrandSrc.value = src
-}
 </script>
 
 <template>
-  <div class="mx-auto max-w-screen-xl space-y-12 px-4 py-10">
-    <section>
-      <div class="mb-5 flex items-center gap-2">
-        <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
-        <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">{{ title }}</h2>
-      </div>
+  <div>
+    <div class="min-h-screen md:bg-[url('/images/bg/hot.png')] md:bg-[length:100%_100%] bg-no-repeat bg-top bg-fixed">
+      <div class="mx-auto max-w-screen-xl space-y-12 px-4 py-10">
+        <section>
+          <div class="mb-2 flex items-center gap-2">
+            <span class="block h-5 w-1 rounded-full bg-primary" aria-hidden="true" />
+            <h2 class="font-sans text-lg font-bold tracking-tight text-foreground">{{ props.category ? $t(`nav.${props.category}`) : '' }}</h2>
+          </div>
 
-      <div
-        v-if="showCategoryTabs"
-        class="scrollbar-hide mb-5 flex items-center gap-2 overflow-x-auto pb-1"
-      >
-        <button
-          v-for="cat in categories"
-          :key="cat.id"
-          type="button"
-          class="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200"
-          :class="
-            cn(
-              activeCategory === cat.id
-                ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
-                : 'border border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground',
-            )
-          "
-          @click="activeCategory = cat.id"
-        >
-          <component :is="cat.icon" class="h-4 w-4" />
-          {{ cat.label }}
-          <span class="text-[10px] font-normal opacity-70">{{ cat.labelEn }}</span>
-        </button>
-      </div>
+          <div v-if="categoryBrands.length" class="mb-6 rounded-2xl px-3 pt-1.5 pb-2 sm:px-4">
+            <div class="grid grid-cols-4 gap-1.5 sm:grid-cols-5 sm:gap-2 md:grid-cols-5 lg:grid-cols-6">
+              <GameCard v-for="brand in categoryBrands" :key="brand.gameKey" :brand="brand" :active="activeProduct === brand.productId" @click="changeGame(brand.productId)" />
+            </div>
+          </div>
 
-      <div
-        v-if="categoryBrands.length"
-        class="mb-6 rounded-2xl px-3 pt-1.5 pb-2 sm:px-4"
-      >
-        <div class="grid grid-cols-4 gap-1.5 sm:grid-cols-5 sm:gap-2 md:grid-cols-5 lg:grid-cols-6">
-          <GameCard
-            v-for="brand in categoryBrands"
-            :key="brand.src"
-            :brand="brand"
-            :active="activeBrandSrc === brand.src"
-            @click="selectBrand(brand.src)"
-          />
-        </div>
-      </div>
+          <div class="mb-6 flex items-center gap-3" aria-hidden="true">
+            <span class="h-px flex-1 bg-border" />
+            <span class="shrink-0 font-sans text-[14px] font-medium uppercase tracking-widest text-muted-foreground/80">
+              {{ $t('label.gamesList') }}
+            </span>
+            <span class="h-px flex-1 bg-border" />
+          </div>
 
-      <div
-        v-if="categoryBrands.length"
-        class="mb-6 flex items-center gap-3"
-        aria-hidden="true"
-      >
-        <span class="h-px flex-1 bg-border" />
-        <span class="shrink-0 font-sans text-[14px] font-medium uppercase tracking-widest text-muted-foreground/80">
-          遊戲列表
-        </span>
-        <span class="h-px flex-1 bg-border" />
-      </div>
+          <div class="grid grid-cols-2 gap-1.5 lg:grid-cols-6 md:grid-cols-3">
+            <GameCard v-for="game in displayGames" :key="`${game.gameId}`" :game="game" />
+          </div>
 
-      <div class="grid grid-cols-2 gap-1.5 lg:grid-cols-6 md:grid-cols-3">
-        <GameCard v-for="game in displayGames" :key="`${game.image}-${game.id}`" :game="game" />
+          <div v-if="displayGames.length === 0" class="py-16 text-center text-muted-foreground">
+            {{ $t('label.noGames') }}
+          </div>
+        </section>
       </div>
-
-      <div v-if="displayGames.length === 0" class="py-16 text-center text-muted-foreground">
-        暫無遊戲
-      </div>
-    </section>
+    </div>
   </div>
 </template>

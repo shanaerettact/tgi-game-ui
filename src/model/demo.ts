@@ -3,6 +3,11 @@ export class ReqDemoLogin {
   password = "";
 }
 
+export class RespDemoLogin {
+  operatorToken = "";
+  playerSessionKey = "";
+}
+
 export class ReqDemoGetBalance {
   playerSessionKey = "";
   currencyId = "";
@@ -28,7 +33,7 @@ export class ProductGameListL2 {
 }
 
 export class DemoNavInfo {
-  productType = 0; // 產品類型(1=電子, 2=體育, 3=彩票, 4=真人)
+  productType = 0; // 產品類型(1=電子, 2=體育, 3=彩票, 4=真人, 5=棋牌, 6=斗鸡, 7=捕鱼, 8=电竞, 9=礼物)
 }
 
 export class DemoProductInfo {

@@ -6,14 +6,43 @@
     "selected": "Selected",
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "clear": "Clear"
+    "clear": "Clear",
+    "username": "Username",
+    "password": "Password",
+    "login": "Login",
+    "logout": "Logout",
+    "balance": "Balance",
+    "gamesList": "Games",
+    "noGames": "No games available.",
+    "gameLobby": "Lobby",
+    "helpSupport": "Help",
+    "footerIntro": "A leading global online gaming platform, providing you with the safest, fairest, and most exciting gaming experience. Holding a legal operating license, your funds are 100% safe.",
+    "copyright": "© 2026 TOP10 Casino. All rights reserved. This site is intended for adults aged 18 and over only. Please participate in gambling responsibly.",
+    "plzLoginFirst": "Please Login First"
   },
   "error_code": {
     "400": "Incorrect params.",
     "401": "SessionKey has expired.",
-    "403": "Insufficient permissions.",
-    "452": "Incorrect Username or Password.",
-    "453": "Disable.",
+    "403": "Insufficient permissions, IP not whitelisted",
+    "452": "Transaction number already used (duplicate transaction)",
+    "453": "Insufficient player wallet balance",
+    "454": "Third-party call forwarding error",
+    "460": "Game is disabled",
     "500": "System error."
+  },
+  "nav": {
+    "hot": "Home",
+    "chess": "Chess",
+    "live": "Live",
+    "slots": "Slots",
+    "sports": "Sports",
+    "lottery": "Lottery"
+  },
+  "support": {
+    "about": "About Us",
+    "responsible": "Responsible Gambling",
+    "privacy": "Privacy Policy",
+    "service": "Terms of Service",
+    "help": "Help Center"
   }
 }

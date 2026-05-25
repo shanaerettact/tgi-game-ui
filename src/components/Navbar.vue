@@ -11,8 +11,12 @@ import {
 } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 import { navItems } from '@/lib/navItems'
+import { useUserStore } from '@/store/module/user';
+import { useLangStore } from '@/store/module/lang';
 
 const route = useRoute()
+const langStore = useLangStore()
+const userStore = useUserStore();
 
 const visibleNavItems = computed(() => navItems.filter((item) => item.icon.trim() !== ''))
 
@@ -35,17 +39,10 @@ type CurrencyCode = (typeof currencyOptions)[number]['code']
 
 const languageOptions = [
   {
-    code: 'zh-CN',
+    code: 'zh_cn',
     label: '简体中文',
     flag: `data:image/svg+xml,${encodeURIComponent(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#DE2910"/><polygon fill="#FFDE00" points="8,6 9.6,11.2 14.8,8.4 10.8,12.4 16.4,12.4 11.2,15.2 13.2,20.8 8,17.2 2.8,20.8 4.8,15.2 0,12.4 5.6,12.4 1.6,8.4 6.8,11.2"/></svg>',
-    )}`,
-  },
-  {
-    code: 'zh-TW',
-    label: '繁體中文',
-    flag: `data:image/svg+xml,${encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#FE0000"/><rect width="16" height="16" fill="#000095"/><circle cx="8" cy="8" r="3.2" fill="#fff"/><g fill="#fff"><circle cx="8" cy="3.2" r="1.1"/><circle cx="8" cy="12.8" r="1.1"/><circle cx="3.2" cy="8" r="1.1"/><circle cx="12.8" cy="8" r="1.1"/><circle cx="9.7" cy="4.5" r="1.1"/><circle cx="6.3" cy="11.5" r="1.1"/><circle cx="4.5" cy="6.3" r="1.1"/><circle cx="11.5" cy="9.7" r="1.1"/><circle cx="11.5" cy="6.3" r="1.1"/><circle cx="4.5" cy="9.7" r="1.1"/><circle cx="6.3" cy="4.5" r="1.1"/><circle cx="9.7" cy="11.5" r="1.1"/></g></svg>',
     )}`,
   },
   {
@@ -71,6 +68,9 @@ function getLanguageFlag(code: LanguageCode) {
   return languageOptions.find((item) => item.code === code)?.flag ?? ''
 }
 
+const username = ref('')
+const password = ref('')
+
 const mobileOpen = defineModel<boolean>('mobileOpen', { default: false })
 
 const activeItem = computed(() => {
@@ -81,17 +81,18 @@ const selectedCurrency = ref<CurrencyCode>('CNY')
 const currencyOpen = ref(false)
 const currencyDropdownRef = ref<HTMLElement | null>(null)
 const currencyDropdownStyle = ref({ top: '0px', left: '0px', minWidth: '0px' })
-const selectedLanguage = ref<LanguageCode>('zh-CN')
+const selectedLanguage = ref<LanguageCode>('zh_cn')
 const languageOpen = ref(false)
 const languageDropdownRef = ref<HTMLElement | null>(null)
 const languageDropdownStyle = ref({ top: '0px', left: '0px', minWidth: '0px' })
 const balanceRefreshing = ref(false)
 let balanceRefreshTimer: ReturnType<typeof setTimeout> | null = null
 
-function refreshBalance() {
+async function refreshBalance() {
   if (balanceRefreshing.value) return
   balanceRefreshing.value = true
   if (balanceRefreshTimer) clearTimeout(balanceRefreshTimer)
+  await userStore.getBalance()
   balanceRefreshTimer = setTimeout(() => {
     balanceRefreshing.value = false
     balanceRefreshTimer = null
@@ -155,11 +156,14 @@ async function toggleLanguageMenu() {
 function selectLanguage(language: LanguageCode) {
   selectedLanguage.value = language
   languageOpen.value = false
+  langStore.setLang(language)
 }
 
 function selectCurrency(currency: CurrencyCode) {
   selectedCurrency.value = currency
   currencyOpen.value = false
+  userStore.setCurrency(currency)
+  userStore.getBalance()
 }
 
 function handleCurrencyClickOutside(event: MouseEvent) {
@@ -194,6 +198,9 @@ onMounted(() => {
   document.addEventListener('click', handleLanguageClickOutside)
   window.addEventListener('resize', handleDropdownLayout)
   window.addEventListener('scroll', handleDropdownLayout, true)
+
+  selectedLanguage.value = langStore.current as LanguageCode
+  if (userStore.isLogin) userStore.getBalance()
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleCurrencyClickOutside)
@@ -266,7 +273,7 @@ watch(mobileOpen, (open) => {
         >
           <img :src="item.icon" :alt="item.label" class="h-5 w-5 shrink-0 rounded object-contain" />
           <span class="flex shrink-0 flex-col items-start leading-tight whitespace-nowrap">
-            <span>{{ item.label }}</span>
+            <span>{{ $t(`nav.${item.key}`) }}</span>
           </span>
         </RouterLink>
       </nav>
@@ -274,90 +281,114 @@ watch(mobileOpen, (open) => {
       <div
         class="relative z-10 flex items-center justify-end gap-1.5 bg-card pl-2 shadow-[-10px_0_12px_-10px_rgba(0,0,0,0.12)] sm:pl-3"
       >
-        <div data-currency-menu class="hidden md:block">
-          <button
-            type="button"
-            data-currency-trigger
-            class="flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-2 py-1 text-sm transition-colors hover:bg-border"
-            @click.stop="toggleCurrencyMenu"
-          >
-            <img
-              :src="getCurrencyFlag(selectedCurrency)"
-              :alt="selectedCurrency"
-              class="h-4 w-4 shrink-0 rounded-full object-cover ring-1 ring-border/50"
-            />
-            <span class="shrink-0 font-medium text-foreground">{{ selectedCurrency }}</span>
-            <ChevronDown
-              :class="
-                cn(
-                  'h-3 w-3 shrink-0 text-muted-foreground transition-transform',
-                  currencyOpen && 'rotate-180',
-                )
-              "
-            />
-          </button>
-        </div>
-        <Teleport to="body">
-          <div
-            v-if="currencyOpen"
-            ref="currencyDropdownRef"
-            class="fixed z-[100] rounded-lg border border-border bg-card py-1 shadow-lg"
-            :style="currencyDropdownStyle"
-          >
+        <template v-if="userStore.isLogin">
+          <div data-currency-menu class="hidden md:block">
             <button
-              v-for="option in currencyOptions"
-              :key="option.code"
               type="button"
-              class="flex w-full cursor-pointer items-center gap-2 px-3 py-1.5 text-left text-sm transition-colors hover:bg-secondary"
-              :class="
-                selectedCurrency === option.code ? 'font-semibold text-primary' : 'text-foreground'
-              "
-              @click="selectCurrency(option.code)"
+              data-currency-trigger
+              class="flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-2 py-1 text-sm transition-colors hover:bg-border"
+              @click.stop="toggleCurrencyMenu"
             >
               <img
-                :src="option.flag"
-                :alt="option.code"
+                :src="getCurrencyFlag(selectedCurrency)"
+                :alt="selectedCurrency"
                 class="h-4 w-4 shrink-0 rounded-full object-cover ring-1 ring-border/50"
               />
-              {{ option.code }}
+              <span class="shrink-0 font-medium text-foreground">{{ selectedCurrency }}</span>
+              <ChevronDown
+                :class="
+                  cn(
+                    'h-3 w-3 shrink-0 text-muted-foreground transition-transform',
+                    currencyOpen && 'rotate-180',
+                  )
+                "
+              />
             </button>
           </div>
-        </Teleport>
-        <div
-          class="hidden shrink-0 flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg px-2 border border-border py-1 text-sm md:flex"
-        >
-          <Wallet class="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          <span class="hidden shrink-0 text-muted-foreground 2xl:inline">余额：</span>
-          <span class="shrink-0 font-semibold tabular-nums text-foreground">206.94</span>
+          <Teleport to="body">
+            <div
+              v-if="currencyOpen"
+              ref="currencyDropdownRef"
+              class="fixed z-[100] rounded-lg border border-border bg-card py-1 shadow-lg"
+              :style="currencyDropdownStyle"
+            >
+              <button
+                v-for="option in currencyOptions"
+                :key="option.code"
+                type="button"
+                class="flex w-full cursor-pointer items-center gap-2 px-3 py-1.5 text-left text-sm transition-colors hover:bg-secondary"
+                :class="
+                  selectedCurrency === option.code ? 'font-semibold text-primary' : 'text-foreground'
+                "
+                @click="selectCurrency(option.code)"
+              >
+                <img
+                  :src="option.flag"
+                  :alt="option.code"
+                  class="h-4 w-4 shrink-0 rounded-full object-cover ring-1 ring-border/50"
+                />
+                {{ option.code }}
+              </button>
+            </div>
+          </Teleport>
+          <div
+            class="hidden shrink-0 flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg px-2 border border-border py-1 text-sm md:flex"
+          >
+            <Wallet class="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span class="hidden shrink-0 text-muted-foreground 2xl:inline">{{ $t('label.balance') }}：</span>
+            <span class="shrink-0 font-semibold tabular-nums text-foreground">{{ userStore.balance }}</span>
+            <button
+              type="button"
+              aria-label="刷新余额"
+              class="cursor-pointer text-muted-foreground transition-colors hover:text-primary"
+              @click="refreshBalance"
+            >
+              <RefreshCw
+                :class="
+                  cn('h-3 w-3 shrink-0', balanceRefreshing && 'animate-spin text-primary')
+                "
+              />
+            </button>
+          </div>
+          <div
+            class="hidden shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-2 py-1 text-sm font-medium text-foreground transition-colors hover:bg-border md:flex"
+          >
+            <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
+              <span class="text-xs font-bold text-primary">{{ userStore.player?.charAt(0) }}</span>
+            </div>
+            <span class="hidden shrink-0 2xl:inline">{{ userStore.player }}</span>
+          </div>
           <button
             type="button"
-            aria-label="刷新余额"
-            class="cursor-pointer text-muted-foreground transition-colors hover:text-primary"
-            @click="refreshBalance"
+            :aria-label="$t('label.logout')"
+            class="hidden shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-2.5 py-1.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors cursor-pointer hover:bg-[#c4102a] sm:flex"
+            @click="userStore.logout()"
           >
-            <RefreshCw
-              :class="
-                cn('h-3 w-3 shrink-0', balanceRefreshing && 'animate-spin text-primary')
-              "
-            />
+            <LogIn class="h-4 w-4 shrink-0" />
+            <span class="hidden shrink-0 2xl:inline">{{ $t('label.logout') }}</span>
           </button>
-        </div>
-        <div
-          class="hidden shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-2 py-1 text-sm font-medium text-foreground transition-colors hover:bg-border md:flex"
-        >
-          <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
-            <span class="text-xs font-bold text-primary">J</span>
+        </template>
+        <template v-else>
+          <div
+            class="hidden shrink-0 flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-2 py-1 text-sm transition-colors focus-within:border-primary md:flex"
+          >
+            <input v-model="username" type="text" id="login-username" class="w-20 border-0 bg-transparent pl-1 outline-none ring-0 focus:border-0 focus:outline-none focus:ring-0 active:border-0" :placeholder="$t('label.username')">
           </div>
-          <span class="hidden shrink-0 2xl:inline">johnny</span>
-        </div>
-        <button
-          type="button"
-          aria-label="登出"
-          class="hidden shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-2.5 py-1.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-[#c4102a] sm:flex"
-        >
-          <LogIn class="h-4 w-4 shrink-0" />
-          <span class="hidden shrink-0 2xl:inline">登出</span>
-        </button>
+          <div
+            class="hidden shrink-0 flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-2 py-1 text-sm transition-colors focus-within:border-primary md:flex"
+          >
+            <input v-model="password" type="password" id="login-password" class="w-20 border-0 bg-transparent pl-1 outline-none ring-0 focus:border-0 focus:outline-none focus:ring-0 active:border-0" :placeholder="$t('label.password')" @keydown.enter="userStore.login(username, password)">
+          </div>
+          <button
+            type="button"
+            :aria-label="$t('label.login')"
+            class="hidden shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-2.5 py-1.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors cursor-pointer hover:bg-[#75a5ff] sm:flex"
+            @click="userStore.login(username, password)"
+          >
+            <LogIn class="h-4 w-4 shrink-0" />
+            <span class="hidden shrink-0 2xl:inline">{{ $t('label.login') }}</span>
+          </button>
+        </template>
         <div data-language-menu class="hidden 2xl:block">
           <button
             type="button"
@@ -445,56 +476,70 @@ watch(mobileOpen, (open) => {
         </RouterLink>
       </nav>
       <div class="flex flex-col gap-3 border-t border-border pt-4">
-        <div data-currency-menu>
-          <button
-            type="button"
-            data-currency-trigger
-            class="flex w-full cursor-pointer items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-border"
-            @click.stop="toggleCurrencyMenu"
-          >
-            <img
-              :src="getCurrencyFlag(selectedCurrency)"
-              :alt="selectedCurrency"
-              class="h-4 w-4 shrink-0 rounded-full object-cover ring-1 ring-border/50"
-            />
-            <span class="shrink-0 font-medium text-foreground">{{ selectedCurrency }}</span>
-            <ChevronDown
-              :class="
-                cn(
-                  'ml-auto h-3 w-3 shrink-0 text-muted-foreground transition-transform',
-                  currencyOpen && 'rotate-180',
-                )
-              "
-            />
-          </button>
-        </div>
-        <div
-          class="flex w-full flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-3 py-2 text-sm"
-        >
-          <Wallet class="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          <span class="shrink-0 text-muted-foreground">余额：</span>
-          <span class="shrink-0 font-semibold tabular-nums text-foreground">206.94</span>
-          <button
-            type="button"
-            aria-label="刷新余额"
-            class="ml-auto cursor-pointer text-muted-foreground transition-colors hover:text-primary"
-            @click="refreshBalance"
-          >
-            <RefreshCw
-              :class="
-                cn('h-3 w-3 shrink-0', balanceRefreshing && 'animate-spin text-primary')
-              "
-            />
-          </button>
-        </div>
-        <div
-          class="flex w-full cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-border"
-        >
-          <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
-            <span class="text-xs font-bold text-primary">J</span>
+        <template v-if="userStore.isLogin">
+          <div data-currency-menu>
+            <button
+              type="button"
+              data-currency-trigger
+              class="flex w-full cursor-pointer items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-border"
+              @click.stop="toggleCurrencyMenu"
+            >
+              <img
+                :src="getCurrencyFlag(selectedCurrency)"
+                :alt="selectedCurrency"
+                class="h-4 w-4 shrink-0 rounded-full object-cover ring-1 ring-border/50"
+              />
+              <span class="shrink-0 font-medium text-foreground">{{ selectedCurrency }}</span>
+              <ChevronDown
+                :class="
+                  cn(
+                    'ml-auto h-3 w-3 shrink-0 text-muted-foreground transition-transform',
+                    currencyOpen && 'rotate-180',
+                  )
+                "
+              />
+            </button>
           </div>
-          <span class="shrink-0">johnny</span>
-        </div>
+          <div
+            class="flex w-full flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-3 py-2 text-sm"
+          >
+            <Wallet class="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span class="shrink-0 text-muted-foreground">{{ $t('label.balance') }}：</span>
+            <span class="shrink-0 font-semibold tabular-nums text-foreground">{{ userStore.balance }}</span>
+            <button
+              type="button"
+              aria-label="刷新余额"
+              class="ml-auto cursor-pointer text-muted-foreground transition-colors hover:text-primary"
+              @click="refreshBalance"
+            >
+              <RefreshCw
+                :class="
+                  cn('h-3 w-3 shrink-0', balanceRefreshing && 'animate-spin text-primary')
+                "
+              />
+            </button>
+          </div>
+          <div
+            class="flex w-full cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-border"
+          >
+            <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
+              <span class="text-xs font-bold text-primary">{{ userStore.player?.charAt(0) }}</span>
+            </div>
+            <span class="shrink-0">{{ userStore.player }}</span>
+          </div>
+        </template>
+        <template v-else>
+          <div
+            class="flex w-full flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-3 py-2 text-sm"
+          >
+            <input v-model="username" type="text" id="login-username-mobile" class="w-full border pl-1" :placeholder="$t('label.username')">
+          </div>
+          <div
+            class="flex w-full flex-nowrap items-center gap-1.5 whitespace-nowrap rounded-lg border border-border px-3 py-2 text-sm"
+          >
+            <input v-model="password" type="password" id="login-username-mobile" class="w-full border pl-1" :placeholder="$t('label.password')" >
+          </div>
+        </template>
         <div data-language-menu>
           <button
             type="button"
@@ -518,13 +563,22 @@ watch(mobileOpen, (open) => {
             />
           </button>
         </div>
-        <button
+        <button v-if="userStore.isLogin"
           type="button"
-          aria-label="登出"
+          :aria-label="$t('label.logout')"
           class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-[#c4102a]"
         >
           <LogIn class="h-4 w-4 shrink-0" />
-          登出
+          {{ $t('label.logout') }}
+        </button>
+        <button v-else
+          type="button"
+          :aria-label="$t('label.login')"
+          class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-[#75a5ff]"
+          @click="userStore.login(username, password)"
+        >
+          <LogIn class="h-4 w-4 shrink-0" />
+          {{ $t('label.login') }}
         </button>
       </div>
     </div>
